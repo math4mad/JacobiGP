@@ -9,6 +9,10 @@ description = "Jacobi-polynomial basis Gaussian Processes: (alpha, beta) as an a
 requires-python = ">=3.11"
 dependencies = ["numpy", "scipy", "torch", "matplotlib"]
 
+[project.optional-dependencies]
+# only needed to rebuild the GitHub Pages site from the markdown (docs/build_site.py)
+site = ["markdown>=3.6", "pymdown-extensions>=10"]
+
 [tool.setuptools.packages.find]
 where = ["src"]
 

@@ -77,7 +77,16 @@ python experiments/exp4_evidence_learning.py # ~7 min
 python experiments/exp5_sensitivity.py      # ~4 min
 ```
 
-## Two things to know before using it
+## The published report
+
+**[math4mad.github.io/JacobiGP](https://math4mad.github.io/JacobiGP/)** — the overview, the
+full report with its figures, and the mathematical specification, built from these very files:
+
+```bash
+pip install -e ".[site]"
+python docs/build_site.py --out _site        # then publish _site/ to the gh-pages branch
+```
+
 
 `α, β > -1` is enforced structurally (`α = -1 + softplus(u)`), the admissible set is
 nevertheless **open**, and the evidence is unbounded on it: with no prior, the optimiser
