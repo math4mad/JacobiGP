@@ -1,0 +1,100 @@
+{
+  "sets": [
+    {
+      "label": "1  Legendre   (0,0)",
+      "alpha": 0.0,
+      "beta": 0.0
+    },
+    {
+      "label": "2  symmetric  (2,2)",
+      "alpha": 2.0,
+      "beta": 2.0
+    },
+    {
+      "label": "3  asymmetric (5,0)",
+      "alpha": 5.0,
+      "beta": 0.0
+    },
+    {
+      "label": "4  Dirichlet (-0.5,-0.5)",
+      "alpha": -0.5,
+      "beta": -0.5
+    }
+  ],
+  "spectrum": "se",
+  "lengthscale": 0.5,
+  "sigma2": 1.0,
+  "N": 30,
+  "metrics": [
+    {
+      "set": "1  Legendre   (0,0)",
+      "alpha": 0.0,
+      "beta": 0.0,
+      "sample_min": -4.405309306334676,
+      "sample_max": 5.2239629896302615,
+      "edge_sd": 1.9427371916234855,
+      "centre_sd": 1.1112231860071857,
+      "edge_over_centre": 1.748287127272849,
+      "edge_crossing_frac": 0.0,
+      "trace_K": 3.0066282746310007,
+      "participation_dim": 3.977996551264813,
+      "mean|f|_edge": 1.403800850331795,
+      "mean|f|_centre": 0.8551879513702553,
+      "edge_consistency": 0.9195356238278961
+    },
+    {
+      "set": "2  symmetric  (2,2)",
+      "alpha": 2.0,
+      "beta": 2.0,
+      "sample_min": -23.993766036712028,
+      "sample_max": 24.492102256158663,
+      "edge_sd": 7.627761723950388,
+      "centre_sd": 2.0932961825228356,
+      "edge_over_centre": 3.6438998874767106,
+      "edge_crossing_frac": 0.0,
+      "trace_K": 3.0066282746310007,
+      "participation_dim": 3.977996551264813,
+      "mean|f|_edge": 5.262752607978052,
+      "mean|f|_centre": 1.5562184096151161,
+      "edge_consistency": 0.9912230716521049
+    },
+    {
+      "set": "3  asymmetric (5,0)",
+      "alpha": 5.0,
+      "beta": 0.0,
+      "sample_min": -114.29276310700683,
+      "sample_max": 124.07062803974507,
+      "edge_sd": 20.82713602368456,
+      "centre_sd": 4.0022344780999655,
+      "edge_over_centre": 5.203877018612888,
+      "edge_crossing_frac": 0.0,
+      "trace_K": 3.0066282746310007,
+      "participation_dim": 3.977996551264813,
+      "mean|f|_edge": 17.63769021436359,
+      "mean|f|_centre": 3.1005996395863473,
+      "edge_consistency": 1.1717632147762618
+    },
+    {
+      "set": "4  Dirichlet (-0.5,-0.5)",
+      "alpha": -0.5,
+      "beta": -0.5,
+      "sample_min": -2.3873121652690807,
+      "sample_max": 2.910053646899143,
+      "edge_sd": 1.0966823658262665,
+      "centre_sd": 0.8990943578234639,
+      "edge_over_centre": 1.2197633722016958,
+      "edge_crossing_frac": 0.0,
+      "trace_K": 3.0066282746310007,
+      "participation_dim": 3.977996551264813,
+      "mean|f|_edge": 0.8142484626035768,
+      "mean|f|_centre": 0.6970348820945593,
+      "edge_consistency": 0.9204627623524195
+    }
+  ],
+  "checks": {
+    "identical spectra => trace(K) and participation dimension are the same for all sets": true,
+    "edge/centre sd is monotone in alpha+beta (spaces are geometrically different)": true,
+    "Set 3 (5,0) is asymmetric: sd at +1 >> sd at -1": true,
+    "typical prior sample of Set 4 is small at the edge, Set 2 is large": true
+  }
+}
