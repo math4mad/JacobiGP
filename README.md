@@ -30,9 +30,10 @@ That is really good !
 | Exp 3 | d/dx of the GP is another Jacobi GP, in the (α+1, β+1) space | ✅ ladder identity to 1.5e-15 relative; finite differences **converge** to it; the derivative carries an exact (and calibrated) sd |
 | Exp 3b | so the PDE itself can be the data: a Bayesian collocation solve | ✅ u error 4.3e-5 at 36 modes (18× better than fitting u data, 130× better than finite differences at the same dof), Dirichlet data honoured to 1e-16, and the prior shown to be the regulariser |
 | Exp 4 | the best space can be learned from the marginal likelihood | ✅ 6 targets, 6 boundary signatures, all recovered; 6 multi-starts agree to 1e-5 — **but only as MAP**: pure ML is degenerate on the open admissible set |
+| Exp 5 | is that answer the method or the prior? | ✅ the **sign** of α−β survives prior sd 0.75–4, N 16–64, four spectral tails and five data draws; the **magnitude** is MAP-shrunk and spectrum-dependent; and the extrapolative advantage vanishes exactly when the boundary layer is sampled |
 
-Read [`docs/RESULTS.md`](docs/RESULTS.md) for the numbers, the figures and the negative
-results; [`docs/MATH.md`](docs/MATH.md) for the mathematical specification (basis,
+Read [`docs/RESULTS.md`](docs/RESULTS.md) for the numbers, the figures, the sensitivity
+study and the negative results; [`docs/MATH.md`](docs/MATH.md) for the mathematical specification (basis,
 eigenvalue schedules, inference, the ladder rule, edge asymptotics, and the addendum on why
 a prior on (α, β) is part of the method).
 
@@ -52,9 +53,10 @@ src/jacobigp/
   datasets.py    the synthetic targets and the manufactured Poisson problem
   metrics.py     RMSE split into interior / left edge / right edge
   baselines.py   an RBF-GP reference (and its finite-difference-only derivatives)
-experiments/     exp1_boundary.py      exp2_rkhs_geometry.py   exp3_derivative_space.py
-                 exp3b_pde_collocation.py   exp4_evidence_learning.py
-                 (shared helpers in common.py; each writes results/*.json + figures/*.png)
+experiments/     exp1_boundary.py        exp2_rkhs_geometry.py   exp3_derivative_space.py
+                 exp3b_pde_collocation.py exp4_evidence_learning.py
+                 exp5_sensitivity.py     (shared helpers in common.py, and exp4's MAP fitter
+                 is imported by exp5; each writes results/*.json + results/*.csv + figures/*.png)
 tests/           21 tests: recurrence vs scipy, norms vs the Γ formula, kernel ≡ weight
                  space, prior-sample covariance, ladder derivatives, exact LOO vs an
                  explicit refit, per-row noise, the (α, β) prior, a PDE collocation solve
@@ -72,6 +74,7 @@ python experiments/exp2_rkhs_geometry.py   # ~20 s
 python experiments/exp3_derivative_space.py  # ~2 min
 python experiments/exp3b_pde_collocation.py  # ~1 min
 python experiments/exp4_evidence_learning.py # ~7 min
+python experiments/exp5_sensitivity.py      # ~4 min
 ```
 
 ## Two things to know before using it

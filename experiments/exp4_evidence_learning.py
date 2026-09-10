@@ -105,12 +105,13 @@ def penalty(params, sd=PRIOR_SD):
     return 0.5 * ((params.raw_alpha / sd) ** 2 + (params.raw_beta / sd) ** 2)
 
 
-def objective(gp, X, y, penalise=True):
+def objective(gp, X, y, penalise=True, prior_sd=PRIOR_SD):
     v = gp.log_marginal_likelihood(X, y)
-    return v - penalty(gp.params) if penalise else v
+    return v - penalty(gp.params, prior_sd) if penalise else v
 
 
-def fit_track(gp, X, y, penalise=True, adam_steps=500, lr=0.05, lbfgs_iters=150, snap_every=None):
+def fit_track(gp, X, y, penalise=True, adam_steps=500, lr=0.05, lbfgs_iters=150, snap_every=None,
+              prior_sd=PRIOR_SD):
     """Adam warm-up + L-BFGS on the (penalised) evidence; records the (alpha, beta, obj) path.
 
     If the iterates walk out of the admissible half-plane the objective raises (see
@@ -121,14 +122,14 @@ def fit_track(gp, X, y, penalise=True, adam_steps=500, lr=0.05, lbfgs_iters=150,
     good = [gp.params.as_dict()]          # last iterate at which the objective evaluated
 
     def evaluate():
-        v = objective(gp, X, y, penalise)  # may raise -> `good` is then still the previous one
+        v = objective(gp, X, y, penalise, prior_sd)   # may raise -> `good` keeps the previous
         good[0] = gp.params.as_dict()
         return v
 
     def snap(tag):
         d = gp.params.as_dict()
         lml = float(gp.log_marginal_likelihood(X, y).detach())
-        pen = float(penalty(gp.params).detach()) if penalise else 0.0
+        pen = float(penalty(gp.params, prior_sd).detach()) if penalise else 0.0
         traj.append(dict(tag=tag, **d, obj=lml - pen, lml=lml))
 
     params = [p for p in gp.parameters() if p.requires_grad]
@@ -490,7 +491,10 @@ def main():
         clamped_edge_error=clamped, clamped_edge_error_legendre=clamped0,
         evidence_gain=gain, mirror_gap=mirrors, asym_signature=asym_ok,
         mirror_likelihood_ratio=lr_mirror,
-        ridge_scan=ridge, pure_ml_run=ml_pure, spread=spread, multistart=multis, paths=paths,
+        ridge_scan=ridge, pure_ml_run=ml_pure, spread=spread, paths=paths,
+        # the full 6-start trajectories are only plotted for PRIMARY; keep the endpoints of
+        # the rest, otherwise this file is 20k lines of numbers nobody reads
+        multistart={t: (v if t == PRIMARY else [tr[-1] for tr in v]) for t, v in multis.items()},
         gradient_check=gcheck,
         landscape=dict(alpha=grid, beta=grid, map=Z.tolist(), lml=Raw.tolist(), rmse=Rm.tolist(),
                        argmax_map=[grid[jm[0]], grid[jm[1]]], argmax_value=float(Z[jm]),
