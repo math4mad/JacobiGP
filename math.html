@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Math — JacobiGP</title>
+<meta name="description" content="Math">
+<style>
+:root { --fg:#1c1e21; --mut:#5b6470; --bg:#fdfdfc; --line:#dfe3e8; --accent:#2b6cb0;
+        --code:#f4f6f8; }
+@media (prefers-color-scheme: dark) {
+  :root { --fg:#e6e8ea; --mut:#9aa4af; --bg:#16181b; --line:#2c3036; --accent:#7aa7d8;
+          --code:#1e2126; } }
+* { box-sizing: border-box }
+body { margin:0; background:var(--bg); color:var(--fg);
+       font:16px/1.65 "Charter","Iowan Old Style",Georgia,"Times New Roman",serif; }
+header.top { position:sticky; top:0; z-index:9; backdrop-filter:blur(6px);
+  background:color-mix(in srgb, var(--bg) 86%, transparent);
+  border-bottom:1px solid var(--line); font-family:ui-sans-serif,system-ui,-apple-system,
+  "Helvetica Neue",Arial,sans-serif; }
+header.top .wrap { display:flex; gap:1.2em; align-items:baseline; flex-wrap:wrap;
+  max-width:54rem; margin:0 auto; padding:.6rem 1.2rem; }
+header.top .brand { font-weight:650; letter-spacing:.01em; }
+header.top nav { display:flex; gap:1em; }
+header.top nav a { color:var(--mut); text-decoration:none; font-size:.92rem }
+header.top nav a.on, header.top nav a:hover { color:var(--accent) }
+main { max-width:54rem; margin:0 auto; padding:2.2rem 1.2rem 5rem; }
+h1 { font-size:1.85rem; line-height:1.25; margin:.2em 0 .6em }
+h2 { font-size:1.32rem; margin:2.1em 0 .5em; padding-top:.7em; border-top:1px solid var(--line) }
+h3 { font-size:1.08rem; margin:1.6em 0 .4em }
+h1, h2, h3 { font-family:ui-sans-serif,system-ui,-apple-system,sans-serif; font-weight:650 }
+a { color:var(--accent) }
+p, li { max-width:62ch }
+.lede { color:var(--mut); font-size:1.02rem }
+img { max-width:100%; height:auto; border:1px solid var(--line); border-radius:3px;
+      background:#fff; }
+figure { margin:1.6em 0 }
+figcaption { color:var(--mut); font-size:.86rem; margin-top:.5em; max-width:62ch }
+table { border-collapse:collapse; width:100%; margin:1.3em 0; font-size:.86rem;
+        font-family:ui-sans-serif,system-ui,sans-serif; display:block; overflow-x:auto }
+th, td { border:1px solid var(--line); padding:.42em .6em; text-align:left;
+         vertical-align:top }
+th { background:color-mix(in srgb, var(--code) 70%, var(--bg)); font-weight:600 }
+code, pre { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.86em }
+code { background:var(--code); padding:.12em .34em; border-radius:3px }
+pre { background:var(--code); padding:.85em 1em; border-radius:5px; overflow-x:auto;
+      border:1px solid var(--line) }
+pre code { background:none; padding:0 }
+blockquote { margin:1.2em 0; padding-left:1em; border-left:3px solid var(--line);
+             color:var(--mut) }
+hr { border:0; border-top:1px solid var(--line); margin:2.4em 0 }
+footer { color:var(--mut); font-size:.84rem; border-top:1px solid var(--line);
+         margin-top:4rem; padding-top:1rem; font-family:ui-sans-serif,system-ui,sans-serif }
+.checks { display:flex; flex-wrap:wrap; gap:.45rem; margin:1rem 0 1.6rem;
+          font-family:ui-sans-serif,system-ui,sans-serif; font-size:.8rem }
+.checks a { border:1px solid var(--line); border-radius:999px; padding:.2em .7em;
+            text-decoration:none; color:var(--mut); background:var(--code) }
+.checks a:hover { color:var(--accent); border-color:var(--accent) }
+</style>
+<script>
+MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]},
+           options: {skipHtmlTags: ['script','noscript','style','textarea','pre','code']}};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</head><body>
+<header class="top"><div class="wrap">
+  <span class="brand"><a href="index.html" style="color:inherit;text-decoration:none">JacobiGP</a></span>
+  <nav><a class="" href="index.html">Overview</a> · <a class="" href="report.html">Report</a> · <a class="on" href="math.html">Math</a></nav>
+</div></header>
+<main><h1>Mathematical specification</h1><p>Deliverable of the math phase: the exact objects that <code>Code Weaver</code> must implement
+and that <code>Plot Smith</code>/<code>Dr. Ortho</code> later validate empirically. §1–§5 are the a-priori
+specification; §6–§8 are the addenda that the experiments forced (each is <em>measured</em>, see
+<code>docs/RESULTS.md</code>).</p>
+<hr />
+<h2 id="1.-basis-orthonormal-jacobi-polynomials">1. Basis: <em>orthonormal</em> Jacobi polynomials<a class="headerlink" href="#1.-basis-orthonormal-jacobi-polynomials" title="Permanent link">¶</a></h2>
+<p>Work on the reference interval <span class="arithmatex">\(x\in[-1,1]\)</span> with the Jacobi weight</p>
+<div class="arithmatex">\[
+w^{(\alpha,\beta)}(x) = (1-x)^{\alpha}(1+x)^{\beta},\qquad \alpha&gt;-1,\ \beta&gt;-1 .
+\]</div>
+<p>The classical (Szegő-normalised) polynomials <span class="arithmatex">\(P_n^{(\alpha,\beta)}\)</span> satisfy</p>
+<div class="arithmatex">\[
+\int_{-1}^{1} P_n^{(\alpha,\beta)} P_m^{(\alpha,\beta)}\, w\,dx = h_n\,\delta_{nm},\qquad
+h_n^{(\alpha,\beta)}=\frac{2^{\alpha+\beta+1}}{2n+\alpha+\beta+1}
+\frac{\Gamma(n+\alpha+1)\Gamma(n+\beta+1)}{n!\,\Gamma(n+\alpha+\beta+1)} .
+\]</div>
+<p>We use the <strong>orthonormal</strong> family</p>
+<div class="arithmatex">\[
+\widehat P_n^{(\alpha,\beta)}(x) = P_n^{(\alpha,\beta)}(x)\,\sqrt{1/h_n^{(\alpha,\beta)}},
+\qquad
+\int \widehat P_n \widehat P_m\, w\,dx = \delta_{nm}.
+\]</div>
+<p>Why orthonormal: <code>eval_jacobi</code> plus <span class="arithmatex">\(1/\sqrt{h_n}\)</span> blows up in floating point once
+<span class="arithmatex">\(\alpha,\beta\)</span> or <span class="arithmatex">\(n\)</span> grow (<span class="arithmatex">\(h_n\)</span> contains <span class="arithmatex">\(2^{\alpha+\beta+1}\Gamma\Gamma/\Gamma\)</span>).
+Instead the code evaluates <span class="arithmatex">\(\widehat P_n\)</span> directly with the <strong>symmetric three-term
+recurrence</strong> (Gautschi, <em>Orthogonal Polynomials</em>, §3.2):</p>
+<div class="arithmatex">\[
+x\,\widehat P_n = a_n \widehat P_{n+1} + b_n \widehat P_n + a_{n-1}\widehat P_{n-1},
+\qquad \widehat P_0 = \frac{1}{\sqrt{h_0}},
+\]</div>
+<div class="arithmatex">\[
+a_n=\sqrt{\frac{4(n+1)(n+\alpha+1)(n+\beta+1)(n+\alpha+\beta+1)}
+{(2n+\alpha+\beta+1)(2n+\alpha+\beta+2)^2(2n+\alpha+\beta+3)}},
+\]</div>
+<div class="arithmatex">\[
+b_0=\frac{\beta-\alpha}{\alpha+\beta+2},\qquad
+b_n=\frac{\alpha^2-\beta^2}{(2n+\alpha+\beta)(2n+\alpha+\beta+2)}\quad(n\ge 1).
+\]</div>
+<p>This recurrence is built from <code>+ - * / sqrt lgamma</code> only, hence is <strong>exactly
+differentiable</strong> by Autograd with respect to <span class="arithmatex">\(\alpha\)</span>, <span class="arithmatex">\(\beta\)</span> <em>and</em> <span class="arithmatex">\(x\)</span>.
+That is what makes gradient-based learning of the function space (Experiment 4) possible:
+measured agreement with central differences on <span class="arithmatex">\(\log p(y)\)</span> is <span class="arithmatex">\(2\cdot10^{-9}\)</span> (§6).</p>
+<h3 id="constraints-for-optimisation">Constraints for optimisation<a class="headerlink" href="#constraints-for-optimisation" title="Permanent link">¶</a></h3>
+<p><span class="arithmatex">\(\alpha,\beta\)</span> are parametrised as <span class="arithmatex">\(\alpha = -1+\mathrm{softplus}(u_\alpha)\)</span>
+(likewise <span class="arithmatex">\(\beta\)</span>), so the admissible half-plane <span class="arithmatex">\(\alpha,\beta&gt;-1\)</span> is enforced
+<em>structurally</em>, never by projection or clamping. That is necessary but <strong>not sufficient</strong> —
+see §6.1.</p>
+<hr />
+<h2 id="2.-truncated-gp-bayesian-linear-regression">2. Truncated GP = Bayesian linear regression<a class="headerlink" href="#2.-truncated-gp-bayesian-linear-regression" title="Permanent link">¶</a></h2>
+<div class="arithmatex">\[
+f_N(x)=\sum_{n=0}^{N-1} w_n\,\widehat P_n^{(\alpha,\beta)}(x),
+\qquad w \sim \mathcal N(0,\Lambda),\ \Lambda=\mathrm{diag}(\lambda_0,\dots,\lambda_{N-1}).
+\]</div>
+<p>Induced (spectral) kernel:</p>
+<div class="arithmatex">\[
+k_{\alpha,\beta}(x,x') = \sum_{n=0}^{N-1}\lambda_n\,
+\widehat P_n^{(\alpha,\beta)}(x)\widehat P_n^{(\alpha,\beta)}(x'),
+\qquad
+K=\Phi\Lambda\Phi^{\top},\ \Phi_{in}=\widehat P_n(x_i).
+\]</div>
+<p>Because the basis is orthonormal <strong>in the weighted inner product</strong>, changing
+<span class="arithmatex">\((\alpha,\beta)\)</span> changes the measure, so <span class="arithmatex">\(k\)</span> changes in a way that is <em>not</em>
+absorbable into <span class="arithmatex">\(\lambda_n\)</span>: the RKHS as a set of functions changes
+(Experiment 2: identical <span class="arithmatex">\(\mathrm{tr}\,K\)</span> and participation dimension, edge sd from 1.10 to
+20.8).</p>
+<h3 id="eigenvalue-schedules-smoothness-length-scale-">Eigenvalue schedules (smoothness / length-scale)<a class="headerlink" href="#eigenvalue-schedules-smoothness-length-scale-" title="Permanent link">¶</a></h3>
+<p>With <span class="arithmatex">\(n_{\text{scale}}=1/\ell\)</span>:</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th><span class="arithmatex">\(\lambda_n\)</span> (up to the amplitude <span class="arithmatex">\(\sigma^2\)</span>)</th>
+<th>analogue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>se</code></td>
+<td><span class="arithmatex">\(\exp\!\left(-\tfrac12 (n/n_{\text{scale}})^2\right)\)</span></td>
+<td>squared-exponential / analytic</td>
+</tr>
+<tr>
+<td><code>exp</code></td>
+<td><span class="arithmatex">\(\exp(-n/n_{\text{scale}})\)</span></td>
+<td>rough, exponential decay</td>
+</tr>
+<tr>
+<td><code>matern</code></td>
+<td><span class="arithmatex">\((1+(n/n_{\text{scale}})^2)^{-\nu}\)</span></td>
+<td>algebraic decay, <span class="arithmatex">\(\nu\)</span> controls smoothness</td>
+</tr>
+<tr>
+<td><code>sll</code></td>
+<td><span class="arithmatex">\((1+n(n+\alpha+\beta+1)\ell^2)^{-\nu}\)</span></td>
+<td>true Jacobi Sturm–Liouville eigenvalues</td>
+</tr>
+</tbody>
+</table>
+<p><code>sll</code> is the theoretically clean option: <span class="arithmatex">\(-\big(w\,u'\big)'=\mu\, w\,u\)</span> has
+<span class="arithmatex">\(\mu_n=n(n+\alpha+\beta+1)\)</span> for the Jacobi weight, so <code>sll</code> <em>is</em> a weighted
+Sobolev-space definition <span class="arithmatex">\(\|u\|^2_{H^\nu_w}=\sum (1+\mu_n\ell^2)|c_n|^2\)</span>.
+(Experiment 3 shows the price of that cleanliness: an algebraic tail makes the analytic
+<span class="arithmatex">\(u''\)</span> error <em>grow</em> with <span class="arithmatex">\(N\)</span> — §7.3.)</p>
+<p><strong>Admissibility.</strong> <span class="arithmatex">\(\sum_n\lambda_n&lt;\infty\)</span> guarantees a trace-class covariance and
+a valid GP (needed for <span class="arithmatex">\(N\to\infty\)</span>); with <code>se</code> the sum is bounded by
+<span class="arithmatex">\(\sigma^2\sqrt{\pi/2}\,n_{\text{scale}}\)</span>.</p>
+<hr />
+<h2 id="3.-inference-closed-form-">3. Inference (closed form)<a class="headerlink" href="#3.-inference-closed-form-" title="Permanent link">¶</a></h2>
+<p>Data <span class="arithmatex">\(y_i=f_N(x_i)+\epsilon_i\)</span>, <span class="arithmatex">\(\epsilon\sim\mathcal N(0,\sigma_{\text{noise}}^2)\)</span>,
+<span class="arithmatex">\(\Phi\in\mathbb R^{M\times N}\)</span>:</p>
+<div class="arithmatex">\[
+\Sigma_w=\Big(\Lambda^{-1}+\frac{1}{\sigma_{\text{noise}}^2}\Phi^{\top}\Phi\Big)^{-1},
+\qquad
+\mu_w=\frac{1}{\sigma_{\text{noise}}^2}\Sigma_w\Phi^{\top}y .
+\]</div>
+<p>Cost <span class="arithmatex">\(O(MN^2+N^3)\)</span> — independent of the test-set size after one factorisation, which
+is the practical advantage over <span class="arithmatex">\(O(M^3)\)</span> kernel GPs when <span class="arithmatex">\(M\gg N\)</span>.</p>
+<p>Predictions at test points <span class="arithmatex">\(\Phi_*\)</span>:
+<span class="arithmatex">\(\ \mathbb E[f]=\Phi_*\mu_w,\quad \mathrm{Var}[f]=\mathrm{diag}\!\big(\Phi_*\Sigma_w\Phi_*^{\top}\big)+\sigma_{\text{noise}}^2\)</span>
+(with <code>noise=False</code> for the latent function).</p>
+<p>Log marginal likelihood (evidence), computed in weight space:</p>
+<div class="arithmatex">\[
+-2\log p(y) = \frac{\|y\|^2}{\sigma_{\text{noise}}^2}
++\mu_w^{\top}\Lambda^{-1}\mu_w-\log|\Sigma_w|+\log|\Lambda|
++M\log\big(2\pi\sigma_{\text{noise}}^2\big).
+\]</div>
+<p>The evidence is the objective used to learn <span class="arithmatex">\((\alpha,\beta,\ell,\sigma^2,\sigma_{\text{noise}}^2)\)</span>
+(Experiment 4). Note it is the <em>only</em> object through which <span class="arithmatex">\((\alpha,\beta)\)</span> talk to
+the data — this is precisely the "automatic construction of the functional space".
+The code uses the algebraically equivalent whitened form
+<span class="arithmatex">\(G=I+\Lambda^{1/2}\Phi^{\top}\Phi\Phi^{\top}\Lambda^{1/2}/\sigma^2_{\text{noise}}\)</span>,
+whose eigenvalues are <span class="arithmatex">\(\ge1\)</span>, so <span class="arithmatex">\(\lambda_n\)</span> may underflow to <span class="arithmatex">\(0\)</span> without producing <code>inf</code>.</p>
+<hr />
+<h2 id="4.-derivative-spaces-the-ladder-property-">4. Derivative spaces (the ladder property)<a class="headerlink" href="#4.-derivative-spaces-the-ladder-property-" title="Permanent link">¶</a></h2>
+<div class="arithmatex">\[
+\boxed{\ \frac{d^{k}}{dx^{k}}P_n^{(\alpha,\beta)}(x)
+=\frac{(\alpha+\beta+n+1)^{\overline{k}}}{2^{k}}\,P_{n-k}^{(\alpha+k,\beta+k)}(x)\ }
+\]</div>
+<p>(<span class="arithmatex">\(r^{\overline{k}}\)</span> = rising factorial; the term is <span class="arithmatex">\(0\)</span> for <span class="arithmatex">\(k&gt;n\)</span>). Hence for the
+orthonormal family</p>
+<div class="arithmatex">\[
+\frac{d^{k}}{dx^{k}}\widehat P_n^{(\alpha,\beta)}(x)
+=\frac{(\alpha+\beta+n+1)^{\overline{k}}}{2^{k}}
+\sqrt{\frac{h_{n-k}^{(\alpha+k,\beta+k)}}{h_{n}^{(\alpha,\beta)}}}\;
+\widehat P_{\,n-k}^{(\alpha+k,\beta+k)}(x),
+\]</div>
+<p>with the norm ratio evaluated in log-space via <code>lgamma</code> (never as a quotient of gammas).</p>
+<p>Consequences used in Experiment 3:
+* the GP derivative is <strong>another truncated Jacobi GP</strong> with parameters
+  <span class="arithmatex">\((\alpha+1,\beta+1)\)</span> and <span class="arithmatex">\(N-1\)</span> terms — analytic, no finite differences;
+  verified: <span class="arithmatex">\(d^{k}\Phi\)</span> lies in the <span class="arithmatex">\((\alpha+k,\beta+k)\)</span> span to a <em>relative</em> residual of
+  <span class="arithmatex">\(1.5\cdot10^{-15}\)</span> for <span class="arithmatex">\(k=1,2\)</span>;
+* the second derivative lives in <span class="arithmatex">\((\alpha+2,\beta+2)\)</span>, so the strong form of a
+  <span class="arithmatex">\(2^{nd}\)</span>-order BVP, <span class="arithmatex">\(-\,\mathcal L u = f\)</span>, is evaluated pointwise exactly;
+* <span class="arithmatex">\(w^{(\alpha+1,\beta+1)}=(1-x)(1+x)\,w^{(\alpha,\beta)}\)</span>: differentiation converts a
+  weighted space into one that is degenerate at the boundary by exactly one power —
+  the algebraic shadow of boundary conditions.</p>
+<hr />
+<h2 id="5.-boundary-behaviour-predicted-a-priori">5. Boundary behaviour, predicted a priori<a class="headerlink" href="#5.-boundary-behaviour-predicted-a-priori" title="Permanent link">¶</a></h2>
+<p>From Mehler/Heine asymptotics at the edge, <span class="arithmatex">\(\widehat P_n^{(\alpha,\beta)}(1)\asymp
+n^{\alpha+1/2}/\sqrt{2^{\alpha+\beta+1}}\)</span> while the bulk amplitude is
+<span class="arithmatex">\(\asymp n^{(\alpha+\beta)/2-1/4}\)</span>, so the marginal variance
+<span class="arithmatex">\(k(x,x)=\sum\lambda_n\widehat P_n(x)^2\)</span>:</p>
+<ul>
+<li><span class="arithmatex">\(\alpha,\beta&lt;0\)</span> (Chebyshev-type, <span class="arithmatex">\(w\to\infty\)</span> at the edge): variance <strong>collapses</strong>
+  at <span class="arithmatex">\(x=\pm1\)</span> ⇒ predictions are pulled to the prior mean <span class="arithmatex">\(0\)</span> ⇒ <em>implicit Dirichlet</em>,</li>
+<li><span class="arithmatex">\(\alpha,\beta&gt;0\)</span> (<span class="arithmatex">\(w\to0\)</span>): variance <strong>grows</strong> at the edge ⇒ boundary freedom,</li>
+<li><span class="arithmatex">\(\alpha=\beta=0\)</span> (Legendre): no boundary preference,</li>
+<li>asymmetric <span class="arithmatex">\((\alpha,\beta)\)</span> acts on the two edges independently.</li>
+</ul>
+<p>These four statements are the hypotheses falsified/confirmed by Experiments 1, 2 and 4.</p>
+<hr />
+<h2 id="6.-addendum-the-admissible-set-is-open-and-the-evidence-is-u">6. Addendum — the admissible set is open, and the evidence is unbounded on it<a class="headerlink" href="#6.-addendum-the-admissible-set-is-open-and-the-evidence-is-u" title="Permanent link">¶</a></h2>
+<p>Everything in §1–§5 is correct, but §1's "<em>strict</em> bounds <span class="arithmatex">\(\alpha,\beta&gt;-1\)</span>" are not enough
+for optimisation, because the set is <strong>open</strong> and the objective is <strong>singular at its
+boundary</strong>:</p>
+<ol>
+<li><span class="arithmatex">\(\mu_0=\int w=2^{\alpha+\beta+1}\Gamma(\alpha+1)\Gamma(\beta+1)/\Gamma(\alpha+\beta+2)\)</span>
+   diverges as <span class="arithmatex">\(\alpha\to-1\)</span> (likewise <span class="arithmatex">\(\beta\)</span>), so <span class="arithmatex">\(\widehat P_n=P_n/\sqrt{h_n}\)</span> shrinks
+   toward <span class="arithmatex">\(0\)</span> in the interior: the prior variance can be driven to <span class="arithmatex">\(0\)</span> <em>at the data</em> by
+   pushing a parameter to the boundary, at no cost in fit.</li>
+<li>Conversely, growing <span class="arithmatex">\(\alpha\)</span> inflates <span class="arithmatex">\(\widehat P_n(1)\)</span>, and the same normalisation lets
+   <span class="arithmatex">\(\sigma^2\)</span> compensate any change of <span class="arithmatex">\((\alpha,\beta)\)</span>: along the ridge measured in
+   Experiment 4 the evidence gains <span class="arithmatex">\(9\)</span> nats while <span class="arithmatex">\(\sigma^2\)</span> collapses <span class="arithmatex">\(400\times\)</span>.</li>
+<li>The corner <span class="arithmatex">\(\alpha=\beta=-1\)</span> (<span class="arithmatex">\(\alpha+\beta=-2\)</span>) is where the recurrence coefficients
+   themselves stop existing; the optimiser reaches it in floating point from inside, since
+   each coordinate is protected only strictly.</li>
+</ol>
+<p>Hence the <em>method</em> is not "maximise the evidence in <span class="arithmatex">\((\alpha,\beta)\)</span>" but</p>
+<div class="arithmatex">\[
+(\alpha,\beta,\ell,\sigma^2,\sigma^2_{\text{noise}})
+=\arg\max\Big[\log p(y\mid\theta)+\log p_{\text{prior}}\big(u_\alpha,u_\beta\big)\Big],
+\qquad u_t=\log\!\big(e^{t+1}-1\big),
+\]</div>
+<p>i.e. a weakly-informative <span class="arithmatex">\(\mathcal N(0,s^2)\)</span> on the <em>unconstrained</em> coordinates. In
+constrained coordinates its density vanishes at <span class="arithmatex">\(t=-1\)</span>, so it acts as a logarithmic barrier
+at the singular edge; <span class="arithmatex">\(s=2\)</span> puts 95 % of the mass on <span class="arithmatex">\(\alpha,\beta\in(-0.98,2.9)\)</span>. With it
+the optimum is interior, unique (6 starts agree to <span class="arithmatex">\(10^{-5}\)</span>) and it tracks the boundary
+signature of the data. Without it, Experiment 4 does not work — measured, not asserted.</p>
+<h3 id="6.1-which-parameter-controls-which-edge">6.1 Which parameter controls which edge<a class="headerlink" href="#6.1-which-parameter-controls-which-edge" title="Permanent link">¶</a></h3>
+<p><span class="arithmatex">\((1-x)^{\alpha}\)</span> is the factor that degenerates at <span class="arithmatex">\(x=+1\)</span>, so <strong><span class="arithmatex">\(\alpha\)</span> acts on the right
+edge and <span class="arithmatex">\(\beta\)</span> on the left</strong>. <code>AGENTS.md</code> §3/§5 lists them the other way round; the
+numerics follow the weight, and the mirror-symmetric targets of Experiment 4 are the direct
+test: the learned pairs are <span class="arithmatex">\((1.368,-0.871)\)</span> and <span class="arithmatex">\((-0.861,1.317)\)</span>.</p>
+<hr />
+<h2 id="7.-addendum-what-the-derivative-really-buys-experiment-3-mea">7. Addendum — what the derivative really buys (Experiment 3, measured)<a class="headerlink" href="#7.-addendum-what-the-derivative-really-buys-experiment-3-mea" title="Permanent link">¶</a></h2>
+<p>§4 is exact, but three qualifications belong in the statement of the result.</p>
+<ol>
+<li><strong>A central difference of the posterior mean converges to the ladder derivative</strong>
+   (agreement to <span class="arithmatex">\(0.1\%\)</span> for <span class="arithmatex">\(h\le10^{-3}\)</span>). So the claim is <em>not</em> "more accurate at the
+   optimal step"; it is: no step size to choose, one basis evaluation instead of three, an
+   exact posterior covariance, and operator rows that stay <strong>linear in the weights</strong> — which
+   is what a Bayesian collocation solve needs.</li>
+<li><strong>Finite differences must keep their stencil inside <span class="arithmatex">\([-1,1]\)</span>.</strong> <code>basis.py</code> clamps <span class="arithmatex">\(|x|\)</span>
+   to <span class="arithmatex">\(1-10^{-15}\)</span> (exact <em>at</em> the edge, since polynomials are continuous), hence a node at
+   <span class="arithmatex">\(1+h\)</span> collapses onto <span class="arithmatex">\(1\)</span> and the second difference degenerates into a first one — a fake
+   "catastrophic cancellation" of order <span class="arithmatex">\(h^{-1}\)</span> near the boundary. Score F.D. on
+   <span class="arithmatex">\(|x|\le1-h\)</span> only. (This was a real mis-measurement in the first run of Experiment 3.)</li>
+<li><strong>How large <span class="arithmatex">\(N\)</span> may be is decided by the tail of <span class="arithmatex">\(\lambda_n\)</span>, not by the basis.</strong>
+   <span class="arithmatex">\(d^2/dx^2\)</span> multiplies mode <span class="arithmatex">\(n\)</span> by <span class="arithmatex">\(\sim n^2\)</span>, so an algebraic tail (<code>matern</code>, <code>sll</code>) makes
+   the analytic <span class="arithmatex">\(u''\)</span> error <em>grow</em> with <span class="arithmatex">\(N\)</span> (measured: <span class="arithmatex">\(1.03\to30.6\)</span> from <span class="arithmatex">\(N=16\)</span> to <span class="arithmatex">\(48\)</span>)
+   while an exponential one (<code>se</code>) saturates (<span class="arithmatex">\(0.93\to0.98\)</span>). A truncated spectral GP is not
+   a spectral method: the truncation must be matched to the operator being applied.</li>
+<li>The derivative sd is a <em>model</em>: calibrated once the basis resolves the truth (95 %
+   coverage <span class="arithmatex">\(0.97\)</span> at <span class="arithmatex">\(N=25\)</span>), wildly over-confident when it does not (<span class="arithmatex">\(0.013\)</span> at <span class="arithmatex">\(N=8\)</span>,
+   mean <span class="arithmatex">\(z\)</span>-score <span class="arithmatex">\(59\)</span>).</li>
+</ol>
+<hr />
+<h2 id="8.-addendum-exact-loo-cv-and-one-sign-trap">8. Addendum — exact LOO-CV, and one sign trap<a class="headerlink" href="#8.-addendum-exact-loo-cv-and-one-sign-trap" title="Permanent link">¶</a></h2>
+<p>Because the model is linear-Gaussian, leave-one-out is closed form and differentiable in
+<span class="arithmatex">\((\alpha,\beta)\)</span>: with <span class="arithmatex">\(A=(K+\sigma^2_{\text{noise}}I)^{-1}\)</span>,</p>
+<div class="arithmatex">\[
+p(y_i\mid y_{-i})=\mathcal N\!\Big(y_i-\tfrac{[Ay]_i}{A_{ii}},\ \tfrac{1}{A_{ii}}\Big)
+\qquad\text{(`JacobiGP.loo')} .
+\]</div>
+<p>The mean is <span class="arithmatex">\(y_i-[Ay]_i/A_{ii}\)</span>, <strong>not</strong> <span class="arithmatex">\([Ay]_i/A_{ii}\)</span> (which is the residual); dropping
+the offset silently turns LOO into a nonsense criterion — it did here, and
+<code>tests/test_model.py</code> now pins it against an explicit leave-one-out refit.</p></main>
+<footer>Built from the repository on 2026-09-10 · <a href="https://github.com/math4mad/JacobiGP">https://github.com/math4mad/JacobiGP</a> ·
+figures are produced by <code>experiments/exp*.py</code>, numbers by the same runs
+(<code>results/*.json</code>).</footer>
+</body></html>
