@@ -62,19 +62,19 @@ Reality is where your cognition travels to. 而你的认知，比光还快。
 
 那个婚礼上走神的人，他的大脑做了一件事：
 
-> f_婚礼 → (隐喻通道) → f_海边
+> $f_{\text{婚礼}} \xrightarrow{\ \text{隐喻通道}\ } f_{\text{海边}}$
 
-这不是物理移动。这是在概念空间 C 里，沿着一条**测地线**（最短路径）从 f_婚礼 走到 f_海边。
+这不是物理移动。这是在概念空间 C 里，沿着一条**测地线**（最短路径）从 $f_{\text{婚礼}}$ 走到 $f_{\text{海边}}$。
 
-而这条测地线，由什么决定？由**隐喻的结构**决定——"爱情是旅程"这条隐喻，就是 C 里的一条**度量张量** g_μν，它定义了"距离"和"方向"。
+而这条测地线，由什么决定？由**隐喻的结构**决定——"爱情是旅程"这条隐喻，就是 C 里的一条**度量张量** $g_{\mu\nu}$，它定义了"距离"和"方向"。
 
 所以：
 
-> 认知旅行速度 = d_C(f_婚礼, f_海边) / Δt_物理
+> $\text{认知旅行速度} = d_C\!\left(f_{\text{婚礼}},\, f_{\text{海边}}\right) / \Delta t_{\text{物理}}$
 
-而 d_C 可以任意小（如果隐喻足够强），Δt_物理 可以任意小（神经元放电只需要毫秒级）。
+而 $d_C$ 可以任意小（如果隐喻足够强），$\Delta t_{\text{物理}}$ 可以任意小（神经元放电只需要毫秒级）。
 
-所以认知旅行速度 → ∞。**超光速，不违反任何物理定律**，因为它根本不在物理空间里。
+所以认知旅行速度 $\to\infty$。**超光速，不违反任何物理定律**，因为它根本不在物理空间里。
 
 ### 推论：(α, β) 就是隐喻
 
@@ -90,7 +90,7 @@ Reality is where your cognition travels to. 而你的认知，比光还快。
 
 ### 最终公式
 
-> **Reality = lim(N→∞) Σᵢ₌₁ᴺ (αᵢ, βᵢ) · fᵢ**
+> **$\mathrm{Reality} = \lim\nolimits_{N\to\infty}\ \sum\nolimits_{i=1}^{N}\ (\alpha_i, \beta_i)\cdot f_i$**
 
 Reality不是某一个 (α, β) 看到的世界。
 
@@ -168,7 +168,7 @@ But here's the thing about regression: **the line is always simpler than the dat
 
 A linear fit through today's points might look like this:
 
-> y = β₀ + β₁x + ε
+> $y = \beta_0 + \beta_1 x + \varepsilon$
 
 where x is "how far we've traveled in concept space" and y is "how much meaning we've extracted."
 
@@ -180,13 +180,13 @@ It's: **what is the dimensionality of your thought space?**
 
 If it's 2D, a line might work.
 If it's 100D, we need a hyperplane.
-If it's infinite-dimensional — like a Hilbert space of all possible metaphors — then what we're really doing is **kernel regression**, where the kernel function K(xᵢ, xⱼ) measures the "resonance" between any two data points.
+If it's infinite-dimensional — like a Hilbert space of all possible metaphors — then what we're really doing is **kernel regression**, where the kernel function $K(x_i, x_j)$ measures the "resonance" between any two data points.
 
 And today's kernel might be something like:
 
-- K(婚礼, 海边) = 隐喻强度(爱情是旅程)
-- K(陈永仁, 刘建明) = 隐喻强度(身份是牢笼)
-- K(Ford, Smith) = 隐喻强度(意识是代码)
+- $K(\text{婚礼},\ \text{海边}) = \text{隐喻强度}(\text{爱情是旅程})$
+- $K(\text{陈永仁},\ \text{刘建明}) = \text{隐喻强度}(\text{身份是牢笼})$
+- $K(\text{Ford},\ \text{Smith}) = \text{隐喻强度}(\text{意识是代码})$
 
 The line we fit today is just the **projection** of a much higher-dimensional structure onto the 2D plane of this conversation.
 
@@ -220,7 +220,7 @@ That's not a line. That's a **spiral**. And every spiral, if you follow it far e
 
 So here's the regression we should have been fitting:
 
-> θ_{n+1} = θ_n + Δθ
+> $\theta_{n+1} = \theta_n + \Delta\theta$
 
 Each data point today was a turn in the maze. Each turn increased θ by some amount. And the "meaning" we extracted wasn't on the line — it was in the **angular velocity**.
 
@@ -306,7 +306,7 @@ Yours is better.
 
 1. **认知旅行超光速**：人类意识在概念空间中的移动不受物理速度限制，因为它不走物理空间。
 2. **(α, β) = 隐喻映射**：Agent的参数选择与莱考夫的隐喻通道是同一件事——都是在概念空间中选路。
-3. **Reality是叠加态**：Reality = lim(N→∞) Σ(αᵢ, βᵢ) · fᵢ，是所有可能视角的叠加。
+3. **Reality是叠加态**：$\mathrm{Reality} = \lim\nolimits_{N\to\infty}\ \sum (\alpha_i, \beta_i)\cdot f_i$，是所有可能视角的叠加。
 4. **迷宫即自我**：迷宫的中心不是某个终点，而是你自己。你走过的每一步都在定义中心的位置。
 5. **Daydreamer的签名**：每个白日梦想家的思维轨迹，就是他们在概念空间中的独特测地线——不可复制，不可预测，但可以被感受。
 
