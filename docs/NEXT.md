@@ -1,10 +1,12 @@
-# ONE SPACE — draft: merging JacobiGP and Middle-Eigen-function
+# ONE SPACE — draft: merging JacobiGP, Middle-Eigen-function, and Sarcos-NN-Model
 
 > **Status: proposal, not result.** Nothing on this page has been measured yet —
-> except the parts quoted from [Middle-Eigen-function](https://github.com/math4mad/Middle-Eigen-function),
-> which are marked as measured. The numbers that *this* site owns live in
+> except the parts quoted from [Middle-Eigen-function](https://github.com/math4mad/Middle-Eigen-function)
+> and [Sarcos-NN-Model](https://math4mad.github.io/Sarcos-NN-Model), which are
+> marked as measured. The numbers that *this* site owns live in
 > [RESULTS](report.html); the machinery reused below is specified in [MATH](math.html).
-> Drafted 2026-09-11, the morning the 花絮 conversations happened.
+> Drafted 2026-09-11, the morning the 花絮 conversations happened; third bench
+> wired in the same day.
 
 ---
 
@@ -21,17 +23,17 @@ $$
 Three knobs, three distinct jobs — and the discipline of the merged project is
 to **never let the jobs blur together**:
 
-| knob | JacobiGP role | Middle-Eigen-function counterpart | what it cuts |
+| knob | JacobiGP role | MEF / Sarcos counterpart | what it cuts |
 |---|---|---|---|
 | $N$ | basis truncation | rank $r$; "给学习多大范围" | **size** — how many directions may change |
 | $\lambda_n$ | spectral decay | which singular band to keep (A/B/C, 中带, top 谱) | **smoothness** — which frequencies are cheap |
 | $(\alpha,\beta)$ | boundary weight | *no equivalent yet — this is the contribution* | **shape** — *where* change is allowed |
 
 LoRA says $\Delta W = AB$: an $r$-dimensional update, **isotropic** inside that
-subspace — every direction costs the same. Middle-Eigen-function cut that
-subspace by singular value position. Neither says anything about *where in
-input space* the update should be stiff and where supple. That is exactly the
-degree of freedom $(\alpha,\beta)$ supplies:
+subspace. MEF cut that subspace by singular value position; Sarcos cut it
+under a pinned split with pre-registered predictions. Neither says anything
+about *where in input space* the update should be stiff and where supple. That
+is exactly the degree of freedom $(\alpha,\beta)$ supplies:
 
 > Rank chooses *how much* you're allowed to change; $(\alpha,\beta)$ chooses
 > *where you're allowed to change* — and the evidence chooses the boundaries,
@@ -71,6 +73,40 @@ from evidence (Exp 4).** The merged thesis is precisely the question MEF
 cannot ask with its own knobs: not *which* atoms, but *where the atoms live
 in semantic space*.
 
+### 2b. The Sarcos bench — what it adds, and what it costs us
+
+Measured at [`Sarcos-NN-Model`](https://github.com/math4mad/Sarcos-NN-Model)
+(commit `4ea7678`), on 21-64-64-7 MLPs, 3 seeds, split pinned in `data.py`,
+predictions pre-registered:
+
+5. **The middle-band hypothesis died a second time, on a different bench.**
+   Sarcos's "read-out inversion" (middle $>$ leading at low rank) **failed on
+   its own pre-registered test**: leading $\gg$ middle $\approx$ trailing
+   transfers from $W$ to $\Delta W$ (r64: 0.025 vs 0.805/0.807). Two
+   independent agents, one small dense model and one LLM rig, killing the same
+   idea — row two of the table is now the *best-supported* claim in the
+   programme.
+6. **A constraint on §5: the increment is not low-rank.** Sarcos's from-scratch
+   $\Delta W$ needs rank 144/256 for 99% of its energy, $\|\Delta W\| \approx
+   1.7\,\|W_{\text{init}}\|$. The boundary-weighted prior must be defined over a
+   *full-rank* atom dictionary with a decaying $\lambda_n$ — not over a
+   handful of top directions. (Their own note: this bounds what that bench
+   tests, it does not refute LoRA's fine-tuning ranks. §5 lives in the
+   fine-tuning regime; Sarcos keeps the from-scratch control.)
+7. **The method becomes the programme's law.** Sarcos's hard rules — one
+   canonical split module, regimes in separate rows, retained energy next to
+   every error, pre-registered predictions, never tune on test — are adopted
+   across all three repos (written into this repo's `AGENTS.md` §0).
+8. **The flagship's first real data.** SARCOS *is* the GPML benchmark — the
+   classic function-space dataset walks in from the weight-space side. And it
+   is the one dataset in the programme whose boundaries are not metaphor:
+   joint angles have **physical range-of-motion limits**, and inverse-dynamics
+   torques behave very differently inside them than at them. A JacobiGP per
+   joint with $(\alpha,\beta)$ at the measured joint limits, tested against
+   the z-scored block-split data pipeline already pinned in `data.py`, is the
+   cheapest possible Exp 7.5 — real data, real boundaries, both repos' code
+   already written.
+
 ## 3. Why one project, not two
 
 The shared object is not a metaphor; it is the same code path:
@@ -92,21 +128,24 @@ Proposed layout for the merge:
 
 ```
 one-space/
-├── spaces/          # bases: jacobi.py (from src/jacobigp), svd_atoms.py (from MEF stage14),
+├── spaces/          # bases: jacobi.py (from src/jacobigp), svd_atoms.py (MEF stage14),
 │                    # fourier.py; spectra: decay.py; w_{α,β}-orthogonality, stable eval
 ├── infer/           # shared ΦΛΦᵀ posterior + profiled evidence (Exp-4 machinery),
-│                    # torch backend, MPS-friendly (M1 Pro is the bench of both projects)
-├── models/          # shared artifacts: MEF's extracted spectra / atom dictionaries /
-│                    # probe outputs, this repo's results/*.json — no experiment hand-tunes twice
-├── experiments/     # exp1..5 (JacobiGP) + MEF stages + exp6 (gauge) + exp7 (weighted LoRA)
+│                    # torch backend, MPS-friendly (M1 Pro is the bench of all three)
+├── data/            # Sarcos's data.py split loader, promoted: one canonical split,
+│                    # pinned, leakage-diagnosed — the pattern every dataset follows
+├── models/          # shared artifacts: MEF spectra / atom dictionaries, Sarcos run
+│                    # records (weights_init.npz included), this repo's results/*.json
+├── experiments/     # exp1..5 (JacobiGP) + MEF stages + Sarcos bands + exp6 + exp7
 └── results/         # *.json with "checks": one pill per hypothesis — the site reads them
 ```
 
-Both repos already endow every number with a recompute path (`scripts/` →
+All three repos already endow every number with a recompute path (`scripts/` →
 `outputs/` → rendered report; here `experiments/` → `results/*.json` →
-`build_site.py`). Publishing models/spectra alongside is the only new
-obligation, and it is what turns "the analogy holds" into "the claim is about
-actual weights".
+`build_site.py`; there `results/` → `summary.json` → Quarto tables that
+*cannot disagree* with the runs). Publishing models/spectra alongside is the
+only new obligation, and it is what turns "the analogy holds" into "the claim
+is about actual weights".
 
 ## 4. Experiment 6 (next, cheap, falsifiable): learned exponents as a rank gauge
 
@@ -114,7 +153,9 @@ actual weights".
 
 1. Reuse MEF's LoRA rig (Qwen2.5-0.5B + RTE, paired seeds, ±0.030 band),
    training at ranks $r \in \{2, 8, 32, 64\}$; MEF already swept ranks for
-   effect size, we sweep them for **curve geometry**.
+   effect size, we sweep them for **curve geometry**. A cheaper pilot of the
+   same gauge runs on Sarcos's MLPs first (minutes per arm, from-scratch
+   regime, reported as its own row per rule 3).
 2. Take each validation-loss-vs-epoch curve, map epoch $\mapsto [-1,1]$, fit
    `JacobiGP` with learnable $(\alpha,\beta)$ via the Exp-4 evidence path.
 3. **H6a:** the learned $(\alpha,\beta)$ of an *under-ranked* run (curve
@@ -163,30 +204,35 @@ batches — the Exp-4 loop over the shape of a *weight* space.
 
 ## 6. Naming and papers
 
-Working name **ONE SPACE** (one space, three knobs). The tagline, earned in
-the 花絮 and a *scientific* sentence, not decoration:
+Working name **ONE SPACE** (one space, three knobs; three benches, one
+epistemology). The tagline, earned in the 花絮 and a *scientific* sentence,
+not decoration:
 
 > *JacobiGP: to see the world — in Westworld there are boundaries; in the
 > functional world there are no limits. We choose the boundaries to see the
 > beauty.* — and choosing is done by the evidence, never by hand.
 
 Publication split: JacobiGP = the auto-constructed *function* space, negative
-results included; Middle-Eigen-function = the measured *weight* space and
-what its σ-axis cannot say; the joint contribution is §5: **inductive bias
-as a learnable measure on update directions — location in domain space, not
-rank in spectrum space.**
+results included; Middle-Eigen-function = the measured *weight* space of real
+LLMs and what its σ-axis cannot say; Sarcos-NN-Model = the controlled fast
+bench where predictions are registered before they are killed; the joint
+contribution is §5: **inductive bias as a learnable measure on update
+directions — location in domain space, not rank in spectrum space.**
 
 ## 7. Sequence
 
-1. Merge: extract `spaces/` + `infer/` from both repos; keep JacobiGP exp1–5
-   green (pills must not dim) and MEF's stage scripts importable while both
-   fronts move onto the shared core.
-2. Publish artifacts into `models/` (MEF spectra/atoms; this repo's
-   `results/*.json` stay as they are).
-3. Exp 6 — one afternoon on the M1 Pro; it either funds §5's confidence or
-   spends itself honestly on a null.
-4. Exp 7 — flagship; P1 → P2 → P3, small models first.
-5. One site, two histories: this builder absorbs `report/`'s quarto pages or
+1. Merge: extract `spaces/` + `infer/` from all three repos; keep JacobiGP
+   exp1–5 green (pills must not dim), MEF's stage scripts importable, and
+   Sarcos's split loader canonical while all three fronts move onto the
+   shared core.
+2. Publish artifacts into `models/` (MEF spectra/atoms; Sarcos run records
+   incl. `weights_init.npz`; this repo's `results/*.json` stay as they are).
+3. Exp 6 — Sarcos pilot first (afternoon), MEF rig second (evening); it either
+   funds §5's confidence or spends itself honestly on a null.
+4. Exp 7 — flagship; P1 → P2 → P3, small models first. Exp 7.5 (JacobiGP on
+   SARCOS at physical joint limits) can run in parallel — it needs no LoRA at
+   all, only `data.py` and `infer/`.
+5. One site, three histories: this builder absorbs the two Quarto reports or
    links them — decided after the merge, not before.
 
 *Reality is all the $(\alpha_i, \beta_i)$ superposed; a project is the act of

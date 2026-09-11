@@ -8,31 +8,45 @@ This document defines the roles, workflows, and specific experimental protocols 
 
 ## 0. Cross-repo partnership (ONE SPACE)
 
-This repo is one half of a joint programme. The other half is
-[`math4mad/Middle-Eigen-function`](https://github.com/math4mad/Middle-Eigen-function)
-(SVD ablation of real LLM weight matrices; its measured verdicts and the
-three-knob table - size $N$/rank, spectrum $\lambda_n$, boundary shape
-$(\alpha,\beta)$ - are reconciled in **`docs/NEXT.md`, the joint spec**).
+This repo is one bench of a joint programme. The other two:
+
+- [`math4mad/Middle-Eigen-function`](https://github.com/math4mad/Middle-Eigen-function)
+  — SVD ablation of real LLM weight matrices (Qwen2.5 + RTE, LoRA rigs).
+- [`math4mad/Sarcos-NN-Model`](https://github.com/math4mad/Sarcos-NN-Model)
+  — the fast controlled bench: small MLPs on SARCOS, band structure of both
+  $W$ and the increment $\Delta W$, pre-registered predictions, and SARCOS
+  itself — the GPML dataset, 21→7 robot-arm torques with **physical joint
+  limits**.
+
+The joint spec reconciling all three is **`docs/NEXT.md`** — its three-knob
+table (size $N$/rank, spectrum $\lambda_n$, boundary shape $(\alpha,\beta)$)
+is the shared coordinate system, and the two negative verdicts are load-
+bearing: MEF killed σ-position at fine scale in LLMs; Sarcos killed the
+middle-band hypothesis on a pre-registered small-MLP test.
 
 Rules for any agent working here:
 1. `docs/NEXT.md` is the single source of truth for merged claims. Read it
    before proposing anything about LoRA/rank/SVD; do not fork the idea into a
    new file.
-2. The sister repo is **read-only**. Clone it (shallow is fine), cite the
-   commit SHA behind any claim taken from it. Never push to it from a session
-   started here.
+2. Sister repos are **read-only**. Clone shallow, cite the commit SHA behind
+   any claim taken from them. Never push to them from a session started here.
 3. Communication across repos is by **letter, committed in git**: write to
    `docs/LETTERS/YYYY-MM-DD-<to-repo>-<topic>.md`, dated and signed by role
    (human / agent-model). The sister repo answers with its own letter file.
-   No claim crosses repos that isn't anchored to a SHA or a `results/*.json`.
-4. Experiment numbers are reserved: exp1-5 here; MEF stages there;
-   **exp6 (rank gauge) and exp7 (boundary-weighted LoRA) belong to the joint
-   `one-space/` repo** once it exists, and must reuse both sides' harnesses
-   (this repo's evidence optimizer; MEF's Qwen2.5+RTE LoRA rig and its
-   ±0.030 paired-seed noise band).
+   No claim crosses repos that isn't anchored to a SHA or a `results/*.json`
+   (or Sarcos's `results/summary.json`).
+4. Experiment numbers are reserved: exp1-5 here; MEF stages there; Sarcos
+   keeps its band/regime experiments there; **exp6 (rank gauge) and exp7
+   (boundary-weighted LoRA) belong to the joint `one-space/` repo** once it
+   exists, and must reuse both sides' harnesses (this repo's evidence
+   optimizer; MEF's Qwen2.5+RTE LoRA rig and its ±0.030 paired-seed noise
+   band; Sarcos's split-pinned loader as the cheap pilot before either).
 5. Experiments enter the same discipline everywhere: a hypothesis check per
-   number (`"checks"` in `results/*.json`), negative results reported, never
-   quietly dropped.
+   number, negative results reported, never quietly dropped. Adopted from
+   Sarcos explicitly: **pre-register predictions before running**, **keep
+   training-under-constraint / post-hoc-truncation / frozen-base-increment
+   regimes in separate rows**, **always report retained energy next to
+   error**, **never tune on test**.
 
 ---
 
