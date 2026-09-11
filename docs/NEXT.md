@@ -205,7 +205,14 @@ batches — the Exp-4 loop over the shape of a *weight* space.
 ## 6. Naming and papers
 
 Working name **ONE SPACE** (one space, three knobs; three benches, one
-epistemology). The tagline, earned in the 花絮 and a *scientific* sentence,
+epistemology) — **christened CHORA** (χώρα: the receptacle that must be
+shaped before anything can be poured into it; Letter 003): the programme is
+not about the manifold, it is about the *choice of vessel*, and
+
+> the shape of the container is the knowledge.
+
+The shared workshop lives at `~/Programming/code-2026/chora` (root brief +
+hash-pinned store). The tagline, earned in the 花絮 and a *scientific* sentence,
 not decoration:
 
 > *JacobiGP: to see the world — in Westworld there are boundaries; in the

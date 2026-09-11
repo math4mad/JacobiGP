@@ -24,6 +24,12 @@ is the shared coordinate system, and the two negative verdicts are load-
 bearing: MEF killed σ-position at fine scale in LLMs; Sarcos killed the
 middle-band hypothesis on a pre-registered small-MLP test.
 
+The joint workshop is **`~/Programming/code-2026/chora`** — named **CHORA**
+(χώρα, Plato's shaped receptacle; Letter 003), git-initialized, holding the
+shared model/data store (hash-pinned manifests), the artifacts directories,
+and its own root `AGENTS.md` for joint sessions. *ONE SPACE* remains the
+programme's working title; CHORA is its name.
+
 Rules for any agent working here:
 1. `docs/NEXT.md` is the single source of truth for merged claims. Read it
    before proposing anything about LoRA/rank/SVD; do not fork the idea into a
