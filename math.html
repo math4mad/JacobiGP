@@ -65,7 +65,7 @@ MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]},
 </head><body>
 <header class="top"><div class="wrap">
   <span class="brand"><a href="index.html" style="color:inherit;text-decoration:none">JacobiGP</a></span>
-  <nav><a class="" href="index.html">Overview</a> · <a class="" href="report.html">Report</a> · <a class="on" href="math.html">Math</a></nav>
+  <nav><a class="" href="index.html">Overview</a> · <a class="" href="report.html">Report</a> · <a class="" href="math.html">Math</a> · <a class="" href="gossip.html">花絮 · Gossip</a> · <a class="on" href="wao.html">Wao!</a></nav>
 </div></header>
 <main><h1>Mathematical specification</h1><p>Deliverable of the math phase: the exact objects that <code>Code Weaver</code> must implement
 and that <code>Plot Smith</code>/<code>Dr. Ortho</code> later validate empirically. §1–§5 are the a-priori
@@ -305,7 +305,7 @@ p(y_i\mid y_{-i})=\mathcal N\!\Big(y_i-\tfrac{[Ay]_i}{A_{ii}},\ \tfrac{1}{A_{ii}
 <p>The mean is <span class="arithmatex">\(y_i-[Ay]_i/A_{ii}\)</span>, <strong>not</strong> <span class="arithmatex">\([Ay]_i/A_{ii}\)</span> (which is the residual); dropping
 the offset silently turns LOO into a nonsense criterion — it did here, and
 <code>tests/test_model.py</code> now pins it against an explicit leave-one-out refit.</p></main>
-<footer>Built from the repository on 2026-09-10 · <a href="https://github.com/math4mad/JacobiGP">https://github.com/math4mad/JacobiGP</a> ·
+<footer>Built from the repository on 2026-09-11 · <a href="https://github.com/math4mad/JacobiGP">https://github.com/math4mad/JacobiGP</a> ·
 figures are produced by <code>experiments/exp*.py</code>, numbers by the same runs
 (<code>results/*.json</code>).</footer>
 </body></html>
