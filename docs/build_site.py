@@ -4,11 +4,15 @@ Build the static report site (GitHub Pages, branch `gh-pages`).
 
     python docs/build_site.py [--out DIR] [--sha REF]
 
-Three pages, from the markdown that lives in the repository - nothing is maintained twice:
+Pages, from the markdown that lives in the repository - nothing is maintained twice:
 
     index.html   README.md            the front page: claims, layout, how to run it
     report.html  docs/RESULTS.md      the report: numbers, figures, negative results
     math.html    docs/MATH.md         the mathematical specification and its addenda
+    gossip.html  docs/gossip.md       bonus material (花絮): the morning conversation with
+                                      agent Qwen that the project grew out of
+    wao.html     docs/wao!.md         bonus material (花絮), part two: (α, β) vs LoRA rank,
+                                      Westworld, and "to see the world"
 
 Figures are the ones `experiments/exp*.py` wrote into figures/, and they are injected into
 the report at the head of the section they belong to, so the prose and the picture stay
@@ -33,10 +37,26 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 OUT_DEFAULT = pathlib.Path("/tmp/jacobigp-site")
 REPO = "https://github.com/math4mad/JacobiGP"
 
+# (key, source markdown, nav label, <html lang>, page <h1>, muted lede under the title)
 PAGES = [
-    ("index", "README.md", "JacobiGP — a GP whose function space is a hyper-parameter"),
-    ("report", "docs/RESULTS.md", "Results — the empirical report"),
-    ("math", "docs/MATH.md", "Mathematical specification"),
+    ("index", "README.md", "Overview", "en",
+     "JacobiGP — a GP whose function space is a hyper-parameter", ""),
+    ("report", "docs/RESULTS.md", "Report", "en",
+     "Results — the empirical report", ""),
+    ("math", "docs/MATH.md", "Math", "en",
+     "Mathematical specification", ""),
+    ("gossip", "docs/gossip.md", "花絮 · Gossip", "zh-CN",
+     "花絮 · 认知隐喻、迷宫与 Agent 的对话录",
+     "Bonus material — 花絮闲聊, not part of the report. The morning of 2026-09-11: a "
+     "free-association conversation between Daydreamer and agent Qwen, from Lakoff's "
+     "conceptual metaphors to Westworld to why an agent's (α, β) is a choice of path "
+     "through concept space. Kept because this is where the project's title came from."),
+    ("wao", "docs/wao!.md", "Wao!", "zh-CN",
+     "Wao! — the essence of selection of space",
+     "花絮闲聊, part two — the second cup of coffee. Is there a formal correspondence "
+     "between the Jacobi exponents (α, β) and LoRA's rank r? Boundaries, limits, and "
+     "the declaration \"In Westworld there are boundaries; in the functional world "
+     "there are no limits.\""),
 ]
 
 # section heading (as it appears in RESULTS.md) -> figure to place under it
@@ -123,7 +143,7 @@ MathJax = {tex: {inlineMath: [['\\\\(', '\\\\)']], displayMath: [['\\\\[', '\\\\
 """
 
 PAGE = """<!doctype html>
-<html lang="en"><head>
+<html lang="{lang}"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
@@ -180,9 +200,8 @@ def counts(root: pathlib.Path) -> str:
 
 def build(out: pathlib.Path, sha: str) -> None:
     out.mkdir(parents=True, exist_ok=True)
-    names = {"index": "Overview", "report": "Report", "math": "Math"}
     rendered = {}
-    for key, path, title in PAGES:
+    for key, path, nav_label, lang, title, lede in PAGES:
         src = (ROOT / path).read_text()
         if src.startswith("# "):                       # the page <h1> comes from `title`
             src = src.split("\n", 1)[1]
@@ -198,18 +217,21 @@ def build(out: pathlib.Path, sha: str) -> None:
             extension_configs={"pymdownx.arithmatex": {"generic": True}},
             output_formats=["html"])
         converted = md.convert(src)
-        lede = ("<p class=\"lede\">A truncated Gaussian process in an orthonormal Jacobi "
-                "basis: the two weight exponents (α, β) are ordinary hyper-parameters, so "
-                "the function space is chosen by the data - and this page shows that the "
-                "claim survives contact with the numbers.</p>") if key == "index" else ""
+        if key == "index":
+            lede = ("<p class=\"lede\">A truncated Gaussian process in an orthonormal Jacobi "
+                    "basis: the two weight exponents (α, β) are ordinary hyper-parameters, so "
+                    "the function space is chosen by the data - and this page shows that the "
+                    "claim survives contact with the numbers.</p>")
+        elif lede:
+            lede = f'<p class="lede">{lede}</p>'
         pills = counts(ROOT) if key in ("index", "report") else ""
-        rendered[key] = f"<h1>{title}</h1>{lede}{pills}{converted}"
+        rendered[key] = (f"<h1>{title}</h1>{lede}{pills}{converted}", nav_label, lang)
 
-    nav = " · ".join(f'<a class="{"on" if k == key else ""}" href="{k}.html">{names[k]}</a>'
-                     for k in names)
-    for key, body in rendered.items():
-        html = PAGE.format(title=f"{names[key]} — JacobiGP", desc=names[key], css=CSS,
-                           mjx=MJX, nav=nav, body=body,
+    nav = " · ".join(f'<a class="{"on" if k == key else ""}" href="{k}.html">{label}</a>'
+                     for k, (_, label, _) in rendered.items())
+    for key, (body, label, lang) in rendered.items():
+        html = PAGE.format(title=f"{label} — JacobiGP", desc=label[:200], css=CSS,
+                           lang=lang, mjx=MJX, nav=nav, body=body,
                            date=datetime.date.today().isoformat(), repo=REPO)
         (out / f"{key}.html").write_text(html)
 
@@ -221,7 +243,7 @@ def build(out: pathlib.Path, sha: str) -> None:
         shutil.copy2(png, figs / png.name)
     (out / ".nojekyll").write_text("")
     print(f"[built] {out}")
-    for key in names:
+    for key in rendered:
         size = (out / f"{key}.html").stat().st_size
         print(f"   {key}.html  {size / 1024:6.1f} KiB")
 
