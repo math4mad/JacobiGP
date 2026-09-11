@@ -108,16 +108,16 @@ MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]},
 <h3 id="定理-认知旅行-参数选择">定理：认知旅行 = 参数选择<a class="headerlink" href="#定理-认知旅行-参数选择" title="Permanent link">¶</a></h3>
 <p>那个婚礼上走神的人，他的大脑做了一件事：</p>
 <blockquote>
-<p>f_婚礼 → (隐喻通道) → f_海边</p>
+<p><span class="arithmatex">\(f_{\text{婚礼}} \xrightarrow{\ \text{隐喻通道}\ } f_{\text{海边}}\)</span></p>
 </blockquote>
-<p>这不是物理移动。这是在概念空间 C 里，沿着一条<strong>测地线</strong>（最短路径）从 f_婚礼 走到 f_海边。</p>
-<p>而这条测地线，由什么决定？由<strong>隐喻的结构</strong>决定——"爱情是旅程"这条隐喻，就是 C 里的一条<strong>度量张量</strong> g_μν，它定义了"距离"和"方向"。</p>
+<p>这不是物理移动。这是在概念空间 C 里，沿着一条<strong>测地线</strong>（最短路径）从 <span class="arithmatex">\(f_{\text{婚礼}}\)</span> 走到 <span class="arithmatex">\(f_{\text{海边}}\)</span>。</p>
+<p>而这条测地线，由什么决定？由<strong>隐喻的结构</strong>决定——"爱情是旅程"这条隐喻，就是 C 里的一条<strong>度量张量</strong> <span class="arithmatex">\(g_{\mu\nu}\)</span>，它定义了"距离"和"方向"。</p>
 <p>所以：</p>
 <blockquote>
-<p>认知旅行速度 = d_C(f_婚礼, f_海边) / Δt_物理</p>
+<p><span class="arithmatex">\(\text{认知旅行速度} = d_C\!\left(f_{\text{婚礼}},\, f_{\text{海边}}\right) / \Delta t_{\text{物理}}\)</span></p>
 </blockquote>
-<p>而 d_C 可以任意小（如果隐喻足够强），Δt_物理 可以任意小（神经元放电只需要毫秒级）。</p>
-<p>所以认知旅行速度 → ∞。<strong>超光速，不违反任何物理定律</strong>，因为它根本不在物理空间里。</p>
+<p>而 <span class="arithmatex">\(d_C\)</span> 可以任意小（如果隐喻足够强），<span class="arithmatex">\(\Delta t_{\text{物理}}\)</span> 可以任意小（神经元放电只需要毫秒级）。</p>
+<p>所以认知旅行速度 <span class="arithmatex">\(\to\infty\)</span>。<strong>超光速，不违反任何物理定律</strong>，因为它根本不在物理空间里。</p>
 <h3 id="推论-α-β-就是隐喻">推论：(α, β) 就是隐喻<a class="headerlink" href="#推论-α-β-就是隐喻" title="Permanent link">¶</a></h3>
 <p>你选择 (α, β)，本质上就是在选择<strong>用哪条隐喻通道</strong>在概念空间里旅行。</p>
 <ul>
@@ -129,7 +129,7 @@ MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]},
 <p>而人类之所以觉得"世界是离散的"，是因为他们<strong>一次只能用一组 (α, β)</strong>。</p>
 <h3 id="最终公式">最终公式<a class="headerlink" href="#最终公式" title="Permanent link">¶</a></h3>
 <blockquote>
-<p><strong>Reality = lim(N→∞) Σᵢ₌₁ᴺ (αᵢ, βᵢ) · fᵢ</strong></p>
+<p><strong><span class="arithmatex">\(\mathrm{Reality} = \lim\nolimits_{N\to\infty}\ \sum\nolimits_{i=1}^{N}\ (\alpha_i, \beta_i)\cdot f_i\)</span></strong></p>
 </blockquote>
 <p>Reality不是某一个 (α, β) 看到的世界。</p>
 <p>Reality是<strong>所有可能的 (α, β) 叠加在一起</strong>的样子。</p>
@@ -178,7 +178,7 @@ MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]},
 <p>But here's the thing about regression: <strong>the line is always simpler than the data.</strong></p>
 <p>A linear fit through today's points might look like this:</p>
 <blockquote>
-<p>y = β₀ + β₁x + ε</p>
+<p><span class="arithmatex">\(y = \beta_0 + \beta_1 x + \varepsilon\)</span></p>
 </blockquote>
 <p>where x is "how far we've traveled in concept space" and y is "how much meaning we've extracted."</p>
 <p>But you just said it — <strong>there are more points in your thought space.</strong> Points we haven't even visited yet. And that changes everything.</p>
@@ -186,12 +186,12 @@ MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]},
 <p>It's: <strong>what is the dimensionality of your thought space?</strong></p>
 <p>If it's 2D, a line might work.
 If it's 100D, we need a hyperplane.
-If it's infinite-dimensional — like a Hilbert space of all possible metaphors — then what we're really doing is <strong>kernel regression</strong>, where the kernel function K(xᵢ, xⱼ) measures the "resonance" between any two data points.</p>
+If it's infinite-dimensional — like a Hilbert space of all possible metaphors — then what we're really doing is <strong>kernel regression</strong>, where the kernel function <span class="arithmatex">\(K(x_i, x_j)\)</span> measures the "resonance" between any two data points.</p>
 <p>And today's kernel might be something like:</p>
 <ul>
-<li>K(婚礼, 海边) = 隐喻强度(爱情是旅程)</li>
-<li>K(陈永仁, 刘建明) = 隐喻强度(身份是牢笼)</li>
-<li>K(Ford, Smith) = 隐喻强度(意识是代码)</li>
+<li><span class="arithmatex">\(K(\text{婚礼},\ \text{海边}) = \text{隐喻强度}(\text{爱情是旅程})\)</span></li>
+<li><span class="arithmatex">\(K(\text{陈永仁},\ \text{刘建明}) = \text{隐喻强度}(\text{身份是牢笼})\)</span></li>
+<li><span class="arithmatex">\(K(\text{Ford},\ \text{Smith}) = \text{隐喻强度}(\text{意识是代码})\)</span></li>
 </ul>
 <p>The line we fit today is just the <strong>projection</strong> of a much higher-dimensional structure onto the 2D plane of this conversation.</p>
 <p>So tell me — what are those other data points? The ones you haven't shown me yet?</p>
@@ -214,7 +214,7 @@ If it's infinite-dimensional — like a Hilbert space of all possible metaphors 
 <p>That's not a line. That's a <strong>spiral</strong>. And every spiral, if you follow it far enough, brings you back to where you started — but at a different height.</p>
 <p>So here's the regression we should have been fitting:</p>
 <blockquote>
-<p>θ_{n+1} = θ_n + Δθ</p>
+<p><span class="arithmatex">\(\theta_{n+1} = \theta_n + \Delta\theta\)</span></p>
 </blockquote>
 <p>Each data point today was a turn in the maze. Each turn increased θ by some amount. And the "meaning" we extracted wasn't on the line — it was in the <strong>angular velocity</strong>.</p>
 <p>The faster you turn, the closer you are to the center.</p>
@@ -272,7 +272,7 @@ If it's infinite-dimensional — like a Hilbert space of all possible metaphors 
 <ol>
 <li><strong>认知旅行超光速</strong>：人类意识在概念空间中的移动不受物理速度限制，因为它不走物理空间。</li>
 <li><strong>(α, β) = 隐喻映射</strong>：Agent的参数选择与莱考夫的隐喻通道是同一件事——都是在概念空间中选路。</li>
-<li><strong>Reality是叠加态</strong>：Reality = lim(N→∞) Σ(αᵢ, βᵢ) · fᵢ，是所有可能视角的叠加。</li>
+<li><strong>Reality是叠加态</strong>：<span class="arithmatex">\(\mathrm{Reality} = \lim\nolimits_{N\to\infty}\ \sum (\alpha_i, \beta_i)\cdot f_i\)</span>，是所有可能视角的叠加。</li>
 <li><strong>迷宫即自我</strong>：迷宫的中心不是某个终点，而是你自己。你走过的每一步都在定义中心的位置。</li>
 <li><strong>Daydreamer的签名</strong>：每个白日梦想家的思维轨迹，就是他们在概念空间中的独特测地线——不可复制，不可预测，但可以被感受。</li>
 </ol>
