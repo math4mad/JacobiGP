@@ -17,6 +17,13 @@ This repo is one bench of a joint programme. The other two:
   $W$ and the increment $\Delta W$, pre-registered predictions, and SARCOS
   itself — the GPML dataset, 21→7 robot-arm torques with **physical joint
   limits**.
+- [`math4mad/Polynomial-Activated-NN`](https://github.com/math4mad/Polynomial-Activated-NN)
+  (`~/Programming/code-2026/Polynomial-Activated NN `, trailing space real) —
+  the shape knob taken *inside the layer*: learnable Jacobi/Hermite/Chebyshev/
+  Bernstein polynomials as activation functions vs. ReLU on Fashion-MNIST
+  (planning stage `2a109f2`, code not yet written). Its README's own thesis —
+  adjusting $(\alpha,\beta)$ lets the activation "work in different functional
+  spaces" — is ONE SPACE's third row implemented as a nonlinearity.
 
 The joint spec reconciling all three is **`docs/NEXT.md`** — its three-knob
 table (size $N$/rank, spectrum $\lambda_n$, boundary shape $(\alpha,\beta)$)

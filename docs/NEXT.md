@@ -107,6 +107,48 @@ predictions pre-registered:
    cheapest possible Exp 7.5 — real data, real boundaries, both repos' code
    already written.
 
+### 2c. The fourth bench — shape taken inside the layer (PolyNN)
+
+[`Polynomial-Activated-NN`](https://github.com/math4mad/Polynomial-Activated-NN)
+(brief at `2a109f2`, no code yet) puts a learnable polynomial
+$\phi = \sum_{k=0}^{d} c_k P_k^{(\alpha,\beta)}$ where ReLU sits. In the
+three-knob table this is not a new row — it is the **third row, interiorized**:
+size was depth/width, spectrum was weight decay, and now *shape* lives in the
+nonlinearity each neuron applies to its pre-activation. ReLU vs. Jacobi-
+activated is literally two containers: piecewise-linear (infinite high-frequency
+energy at the kink — the network equivalent of a flat spectrum) vs. a degree-$d$
+basis (bandlimited by construction). Parameter-efficiency claims are therefore
+spectral claims wearing a hat.
+
+**Compute reality check** (the brief was feared unrunnable; arithmetic says
+otherwise): 784-128-10 $\approx 10^5$ params, fwd+bwd $\approx 0.6$ MFLOP per
+sample, 60k $\times$ 20 epochs $\approx 0.7$ TFLOP *total per arm* — same
+order as MEF's declared "minimum publishable" 20-minute run. Whole planned
+matrix (2 arms × 2 widths × seeds): **well under an hour on the shared M1
+Pro.** Fashion-MNIST (~30 MB) downloads into the shared `chora/data/` store,
+already symlinked.
+
+Pre-registered risks worth naming before any epoch runs:
+
+- **Explosion.** Hermite/Chebyshev powers grow fast on wide pre-activations;
+  the brief's own $[-3,3]$ plot window is where the story is. Jacobi on a
+  *squashed* pre-activation $u = \tanh(x)$ keeps the basis on its natural
+  finite interval — the family with built-in boundaries is the one whose
+  domain matches a bounded activation. Prediction P-shape: for equal degree,
+  tanh-squashed Jacobi $\geq$ raw Hermite $\geq$ raw Chebyshev in
+  accuracy-per-parameter.
+- **Regime separation (programme rule).** A learned *unbounded* polynomial
+  activation is neither post-hoc truncation nor a LoRA increment — its own
+  row, its own baseline, per Sarcos's rule 3.
+- **The honest ablation.** Same coefficient budget: a degree-$d$ poly
+  activation has $d{+}1$ params per neuron; "50–70% fewer neurons at equal
+  accuracy" only means something against ReLU nets matched on *total*
+  parameters, not neuron count.
+
+If P-shape holds, Exp 7's boundary-weighted LoRA gains a sibling: the same
+evidence-learned $(\alpha,\beta)$ dial, one applied to *how neurons fire*, one
+to *how weights move*.
+
 ## 3. Why one project, not two
 
 The shared object is not a metaphor; it is the same code path:
@@ -222,9 +264,10 @@ not decoration:
 Publication split: JacobiGP = the auto-constructed *function* space, negative
 results included; Middle-Eigen-function = the measured *weight* space of real
 LLMs and what its σ-axis cannot say; Sarcos-NN-Model = the controlled fast
-bench where predictions are registered before they are killed; the joint
-contribution is §5: **inductive bias as a learnable measure on update
-directions — location in domain space, not rank in spectrum space.**
+bench where predictions are registered before they are killed;
+Polynomial-Activated-NN = shape inside the layer; the joint contribution is
+§5: **inductive bias as a learnable measure on update directions — location
+in domain space, not rank in spectrum space.**
 
 ## 7. Sequence
 
