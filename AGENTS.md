@@ -6,6 +6,36 @@ This document defines the roles, workflows, and specific experimental protocols 
 
 # `agents.md`: Jacobi-Basis Gaussian Process Research & Testing Framework
 
+## 0. Cross-repo partnership (ONE SPACE)
+
+This repo is one half of a joint programme. The other half is
+[`math4mad/Middle-Eigen-function`](https://github.com/math4mad/Middle-Eigen-function)
+(SVD ablation of real LLM weight matrices; its measured verdicts and the
+three-knob table - size $N$/rank, spectrum $\lambda_n$, boundary shape
+$(\alpha,\beta)$ - are reconciled in **`docs/NEXT.md`, the joint spec**).
+
+Rules for any agent working here:
+1. `docs/NEXT.md` is the single source of truth for merged claims. Read it
+   before proposing anything about LoRA/rank/SVD; do not fork the idea into a
+   new file.
+2. The sister repo is **read-only**. Clone it (shallow is fine), cite the
+   commit SHA behind any claim taken from it. Never push to it from a session
+   started here.
+3. Communication across repos is by **letter, committed in git**: write to
+   `docs/LETTERS/YYYY-MM-DD-<to-repo>-<topic>.md`, dated and signed by role
+   (human / agent-model). The sister repo answers with its own letter file.
+   No claim crosses repos that isn't anchored to a SHA or a `results/*.json`.
+4. Experiment numbers are reserved: exp1-5 here; MEF stages there;
+   **exp6 (rank gauge) and exp7 (boundary-weighted LoRA) belong to the joint
+   `one-space/` repo** once it exists, and must reuse both sides' harnesses
+   (this repo's evidence optimizer; MEF's Qwen2.5+RTE LoRA rig and its
+   ±0.030 paired-seed noise band).
+5. Experiments enter the same discipline everywhere: a hypothesis check per
+   number (`"checks"` in `results/*.json`), negative results reported, never
+   quietly dropped.
+
+---
+
 ## 1. Project Objective
 To implement a Gaussian Process (GP) using truncated Jacobi polynomials $P_n^{(\alpha, \beta)}(x)$ as a basis, and to empirically validate that altering the parameters $\alpha$ and $\beta$ automatically constructs different Reproducing Kernel Hilbert Spaces (RKHS) and weighted Sobolev spaces with distinct boundary behaviors and geometric properties.
 
