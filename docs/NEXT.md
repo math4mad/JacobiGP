@@ -183,6 +183,25 @@ If P-shape holds, Exp 7's boundary-weighted LoRA gains a sibling: the same
 evidence-learned $(\alpha,\beta)$ dial, one applied to *how neurons fire*, one
 to *how weights move*.
 
+> **VERDICT 2026-09-12 18:0x (+0800), measured — the sibling above is HALF dead.**
+> H6c, the init-measure form of that sentence, **FAILS**: on PolyNN's own pooled
+> epoch-0 pre-activation histogram of the A-jacobi h=128 arm, the Exp-4 evidence
+> path returns $(\hat\alpha,\hat\beta)=(-0.9226,-0.9163)$ against the registered
+> target $(0.40,0.37)$ at band $\pm0.2000$ — six bands wide, and *negative*, which
+> is the second clause of this experiment's own pre-written obituary. All six
+> starts × five seeds × both registered basis sizes ($N=30$ deciding, $N=64$
+> sensitivity, 4 dp apart) agree, and the fit's explained variance is 0.9999 while
+> $\sigma^2\sim10^8$: the objective reaches the good fit and puts the exponents on
+> the $\alpha,\beta\to-1$ edge `MATH.md` §6 was written to fence. So **"the same
+> dial read from two ends" is struck as a merged claim for the *init* row** and
+> stays live, untested, only where the measure has amplitude $O(1)$ by
+> construction: training curves (H6a/H6b) and weight-space increments (exp 7).
+> PolyNN's own result is untouched — its learned pair still walks to
+> $(0.3589,0.3590)$, replicated bit-identically on machine B. Nothing here is
+> evidence against P-shape. Bytes: `chora:artifacts/results/jacobigp/exp6_h6c/h6c_verdict.json`
+> `(sha256 c51e001a3b1d…)`; paperwork `PREREG_EXP6.md` §H6c + A1 @`99c7a4a`;
+> announcement Letter 006.
+
 ## 3. Why one project, not two
 
 The shared object is not a metaphor; it is the same code path:
@@ -229,6 +248,14 @@ is about actual weights".
 > H6a/H6b/H6c as one committed document, bands, regime rows and obituaries
 > included — is `PREREG_EXP6.md` (this directory). Where this sketch and
 > the registered text differ, **the registered text governs the numbers.**
+>
+> **Measured 2026-09-12, same day:** **H6c FAILS** (the first number of exp6 — see
+> the §2c verdict block, `h6c_verdict.json (c51e001a3b1d…)`, Letter 006).
+> **H6a and H6b remain open and unmeasured**: their donor bytes are training
+> curves, not init measures, and tonight's failure is read as a statement about
+> *the measure*, not about the gauge. Both must now report $\sigma^2$ and the
+> fitted edge-distance next to every $(\hat\alpha,\hat\beta)$ (A1 §3), because §6's
+> ridge has now been met twice on this programme's own data.
 
 *The pilot that connects the halves — runs on MEF's harness, not a new one.*
 
