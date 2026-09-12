@@ -251,11 +251,20 @@ is about actual weights".
 >
 > **Measured 2026-09-12, same day:** **H6c FAILS** (the first number of exp6 — see
 > the §2c verdict block, `h6c_verdict.json (c51e001a3b1d…)`, Letter 006).
-> **H6a and H6b remain open and unmeasured**: their donor bytes are training
-> curves, not init measures, and tonight's failure is read as a statement about
-> *the measure*, not about the gauge. Both must now report $\sigma^2$ and the
-> fitted edge-distance next to every $(\hat\alpha,\hat\beta)$ (A1 §3), because §6's
-> ridge has now been met twice on this programme's own data.
+> **H6a's Sarcos pilot is DEAD on its own curve-clause** (A2 §3: HOLDS iff
+> $S(0.50)>3.0$ **and** $\Delta\le B$; measured $S=7.880$ — 2.6× the threshold —
+> but $\Delta=0.41648$ against $B=0.12416$, i.e. the val curves separated long
+> before the gauge fired; `h6a_pilot_verdict.json (e08ca86d2ea4b381…)`,
+> Letter 007→Sarcos). What survives it is **composition**:
+> $\mathrm d\beta=-0.78143$ vs $\mathrm d\alpha=-0.06661$ (per-coordinate pooled
+> sd 0.13916 / 0.02112) — one edge of the dial carries the entire effect and the
+> other is flat, the same one-ruler-too-global signature as H6c. **This does not
+> license the MEF rank-curve training** (A2 §4 said a HOLD was the licence; a
+> DEAD clause is not a HOLD and is not a FAIL of the dial either).
+> **H6a on MEF's curves and H6b therefore remain open and unmeasured**, and both
+> must now report $\sigma^2$ and the fitted edge-distance next to every
+> $(\hat\alpha,\hat\beta)$ (A1 §3), because §6's ridge has now been met twice on
+> this programme's own data.
 
 *The pilot that connects the halves — runs on MEF's harness, not a new one.*
 
