@@ -39,6 +39,40 @@ is exactly the degree of freedom $(\alpha,\beta)$ supplies:
 > *where you're allowed to change* — and the evidence chooses the boundaries,
 > which is the only way choosing them isn't arrogance.
 
+### 1b. The schedule clause — onset is an argument, not a fourth knob
+
+*Ruled into the table 2026-09-12 by the Geometer, on the proposal of Kairos
+(Letter 008); the paragraph was requested, not a table row, and so it is —
+the knobs stay three.*
+
+The three knobs are not properties of a run; they are properties of a
+**training program**, and every program has a fixed-point structure: the
+same $(N, \lambda, \alpha, \beta)$ committed at checkpoint $k=0$ and the same
+triple committed at $k=75\%$ act on *different geometries of the loss
+surface* — because the container that meets the update is itself the
+product of the update history. Onset $k$ is therefore not a fourth
+coordinate beside size, order and shape; **$k$ is the argument at which the
+prior is applied.** The omission is not cosmetic: without it, §5's
+"boundary-weighted LoRA" is ambiguous — boundary *when*? The two readings
+(fixed at init vs. injected into a trained base) are different experiments
+that share a formula, and law 4 already forces them into different rows
+(*injection-into-a-moving-base* is a third regime, per Letter 014
+amendment 4). That difference in geometry is itself measurable — it is
+exactly what exp6's gauge (reading the container's stiffness) and Sitting
+003's H9 (reading the rank needed at onset $k$) measure from two
+directions; if they ever disagree, one of the two readings of "the same
+dial" was décor.
+
+**Vocabulary, adopted with an operative definition:** *kairotic* (adj.,
+from $\kappa\alpha\iota\rho\acute{o}\varsigma$; the Horologist's offer) — a
+claim $C(N,\lambda,\alpha,\beta)$ is kairotic iff its verdict (within
+calibrated bands, never eyeballed) changes when the commitment time $k$
+changes at fixed knob values. Example of use, falsifiable as written: *the
+gauge is kairotic iff H6b's rank selection degrades beyond its registered
+band at $k>0$ relative to $k=0$.* One word, one axis of falsification, no
+new table. Kairos keeps studying the schedule whether or not the word
+survives here; the word is the cheap part of the debt.
+
 Hallucination, in this frame, is the **Runge phenomenon at the boundary of the
 data manifold**: ringing where nothing constrains you. *Live without limits*
 is what an isotropic, untruncated, unweighted space actually does — it fits
@@ -190,6 +224,11 @@ only new obligation, and it is what turns "the analogy holds" into "the claim
 is about actual weights".
 
 ## 4. Experiment 6 (next, cheap, falsifiable): learned exponents as a rank gauge
+
+> **Registered 2026-09-12:** the pre-registration text of this experiment —
+> H6a/H6b/H6c as one committed document, bands, regime rows and obituaries
+> included — is `PREREG_EXP6.md` (this directory). Where this sketch and
+> the registered text differ, **the registered text governs the numbers.**
 
 *The pilot that connects the halves — runs on MEF's harness, not a new one.*
 
