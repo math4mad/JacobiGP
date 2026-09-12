@@ -264,3 +264,114 @@ the room where it was born") is the pre-registered text for exactly that case.
 
 *Signed: The Geometer's hand (chora root session, machine A), for the chair; H6c's first number may
 not predate this commit, and this commit predates it by construction — the run script checks.*
+
+## A2 (2026-09-12, 18:4x +0800, machine A) — H6a's sanctioned cheap pilot on Sarcos: the rungs, the groups, the estimators and the two clauses, all frozen before the first curve is fit
+
+**Filed by:** the same hand as A1 (a `chora` root session at the human's word, holding the
+Geometer's seat), one commit after H6c's negative (`JacobiGP@99c7a4a`, `chora@015aad0`).
+**Scope:** this amendment registers **the pilot row only**. H6a proper, on MEF's LoRA curves, stays
+as registered and unmeasured; this text cannot score it and its result cannot strike it.
+**Ordering:** enforced by code again — `chora/experiments/exp6_h6a_sarcos_pilot.py` refuses to run
+unless the marker strings of this section are in `docs/PREREG_EXP6.md` at JacobiGP's git HEAD, and
+refuses a second draw if its verdict file exists.
+
+### 1 · Regime row, and the one design fact that had to be said before any number
+
+The pilot runs in Sarcos's **training-under-a-rank-constraint** regime (from scratch, each layer
+capped at rank r; `--mode constrained`). Per Sarcos's own rule 3 it is **its own row, forever**: it
+is never merged with the *post-hoc-truncation* rows or with the `lora` **frozen-base-increment**
+rows already sitting in the same `results/runs/` tree, and no number here is compared against one
+from those rows without naming which regime each arm came from.
+
+Measured in this amendment, not assumed: **on Sarcos the seed moves the split as well as the
+initialisation** — `run.json → split.seed` equals the run seed for every one of the 22 committed
+constrained runs, and the val-set size changes with it (4,373 rows at seed 13; 4,608 at seed 14).
+Therefore *the within-rung spread this pilot pools is split ⊕ init, not init alone*, and the phrase
+"pooled within-group seed spread" in H6a means something weaker here than it does on MEF's paired
+rig. The design is nevertheless **paired by seed across rungs** (every rung is run at all three
+seeds), so the U/O contrast holds split fixed against the comparison even though it does not hold it
+fixed within a rung. This sentence is in the amendment because if it were not, the pilot's effect
+size would silently be read as comparable to MEF's — and it is not.
+
+Never read for anything in this check: the test split. `run.json` records test metrics because the
+runner always records them; this script consumes `history[*].mse_val` and nothing else (Sarcos rule 2).
+
+### 2 · The ladder, frozen
+
+| field | frozen value | note |
+|---|---|---|
+| rungs | r ∈ **{1, 2, 4, 8, 16, 21}** | per layer, last layer capped `min(r, 7)` — Sarcos's own convention (`ranks16-16-7`); 21 is the input-dim cap, so r = 21 is where the constraint stops binding, and that is a *fact about this dataset*, stated in §4 |
+| groups | **U = {1, 2}**, **O = {16, 21}**; {4, 8} are middle rungs, reported, in **neither** group | frozen here; the middle rungs may not be recruited into either group afterwards, in either direction |
+| widths | primary **21-64-64-7** (the published canonical choice); sensitivity **256h256** | separate rows; the primary decides |
+| seeds | **13, 14, 15** (split ⊕ init, §1) | the registered three |
+| epochs / lr / batch / optim | 60 / 1e-3 / 256 / Adam, loss = mse on standardised targets | identical to the 22 committed runs, so the audit in §6 is meaningful |
+| device | CPU, `torch.use_deterministic_algorithms(True)`, single thread | Sarcos rule 5 |
+| curve | `history[e].mse_val`, e = 0…59, **validation only** | the metric the bench selects on |
+
+### 3 · What is fit, and how the check is computed (every estimator written as a formula, so the script has no freedom left)
+
+* **Prefix.** At τ ∈ {0.25, 0.50, 0.75} the fit sees epochs 0 … ⌈τ·60⌉−1 (15 / 30 / 45 points).
+  **The registered check is at τ = 0.50**; τ = 0.25 and 0.75 are reported as description and score
+  nothing.
+* **Coordinate.** epoch index e ↦ x = 2e/(E−1) − 1 over the prefix (E = prefix length), so each
+  prefix spans [−1, 1] — H6a's "epoch ↦ [−1,1]" applied per prefix, as registered.
+* **y.** the `mse_val` values **verbatim**, no re-scaling, no log, no smoothing. Amplitude here is
+  O(10⁻²–10⁰) and the target is smooth and monotone — which is the regime `MATH.md` §6's prior was
+  calibrated for, unlike H6c's 7.04×10⁶-count measure. Recorded so that tonight's corner result is
+  not silently blamed on the objective, and equally so that a *good* reading here cannot be claimed
+  as a vindication of the rig.
+* **Fit.** A1 §3's rig verbatim: Exp-4 evidence path, N = **30** deciding (N = 64 sensitivity row),
+  spectrum `se`, nuisance (ℓ, σ², σ²_noise) free, MAP with `log N(0, 2²)` on the unconstrained
+  softplus (α, β), exp-4's six INITS with the best objective winning, float64. Barrier rule carries
+  over: any coordinate within 0.02 of −0.98 is flagged and reported unaltered.
+* **Within-rung spread** (per coordinate c ∈ {α, β}, per τ): sd²(r, c) over the three seeds,
+  ddof = 1. **Pooled spread:** s_c(τ)² = mean over the four rungs of U ∪ O of sd²(r, c);
+  s(τ) = √( (s_α² + s_β²) / 2 ).
+* **Group means:** m_g,c(τ) = mean of ĉ over the two rungs of g and the three seeds (n = 6).
+* **The separation statistic:** **S(τ) = ‖m_U(τ) − m_O(τ)‖₂ / s(τ)**. The per-coordinate halves
+  |d_c|/s_c are reported and score nothing (one check, as in H6c).
+* **The curve-side clause**, which is what actually kills H6a, frozen as a formula: at the last
+  epoch E_τ of each prefix, Δ(τ) = |mean_U mse_val(E_τ) − mean_O mse_val(E_τ)| (means over the same
+  six arms), against the band B(τ) = 2 · √( mean over the four rungs of U ∪ O of the within-rung
+  sample variance of mse_val at epoch E_τ ).
+
+> **(H6a-pilot, one check)** the pilot row **HOLDS** iff **S(0.50) > 3.0** AND **Δ(0.50) ≤ B(0.50)**.
+> If Δ(0.50) > B(0.50) the curves have already separated and H6a's own death-clause fires — *"the
+> gauge arrived after the event"* — whatever S does. Both numbers are printed in every case.
+
+**Sensitivity, pre-declared, cannot change the verdict:** S at τ = 0.25 / 0.75; the 256h256 row; the
+N = 64 row; the per-coordinate halves. **Obituary** is H6a's registered one, verbatim: *"the
+exponents track nothing beyond the curve tail"*, filed as said, with §5 (exp 7) proceeding without
+the gauge.
+
+### 4 · What a HOLD and a FAIL would each license, written now
+
+* **HOLD** here licenses exactly one thing: running the MEF rig of H6a (r ∈ {2, 8, 32, 64}, paired
+  seeds, ±0.030 band), whose donor curves **do not exist in the record** — checked at 18:3x:
+  `outputs/multi_model/summary.json` carries final scalars only (no `curve`, no `val_loss`, no rank
+  keys), and `stage18_kairos_mini/base_run.json`'s `curve` is a 20-point **per-k** trace, not
+  per-rank. So the pilot is the gate that decides whether that training gets done at all.
+* **FAIL** here is filed against the *pilot row* and does **not** strike H6a on MEF's curves — but
+  it does raise their price, and if the failure mode is again the walk to α,β → −1, that is two
+  independent instances of §6's ridge in this programme's own data and the gauge idea goes to the
+  room rather than to the next rung.
+
+### 5 · Budget, measured not feared
+
+The 22 committed constrained runs report `wall_seconds` 3.35–6.48 (CPU, single thread). The pilot
+grid is 6 rungs × 3 seeds × 2 widths = **36 arms ≈ 4 min of training**, plus ≈ 90 evidence fits at
+the ~4–12 s/fit A1 measured → **under 25 min end to end on A**. The registered text's promise
+("Sarcos pilot: minutes/arm") is confirmed against those records rather than repeated.
+
+### 6 · A free determinism audit, demanded of the runner before any fit
+
+Sarcos's `train.py` claims *"a rerun with the same --seed and split args reproduces the record
+bitwise."* Twenty-two of the pilot's arms share a configuration with a committed run (rungs
+{1, 4, 16, 21} × seeds {13, 14, 15} × both widths). The pilot therefore **re-runs those
+configurations under new run-ids and requires the `history` arrays to be bitwise identical** to the
+committed ones, and reports every mismatch instead of quietly keeping the newer file. If that check
+fails, the pilot's donor curves are not what its own bench thinks they are, and that is the
+headline of the letter regardless of what S says.
+
+*Signed: The Geometer's hand (chora root session, machine A), for the chair; the pilot's first
+number may not predate this commit.*
