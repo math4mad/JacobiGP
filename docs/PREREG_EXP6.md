@@ -90,7 +90,12 @@ warms the search") is then struck from NEXT.md, honestly.
 
 ## H6c — the same dial read from two ends (A-jacobi-evidence, adopted per R1)
 
-**Question.** Letter 006: left free, PolyNN's per-neuron (α,β) walked from
+**Question.** Letter 006: left free, PolyNN's per-neuron (α,β) — **[corr 2026-09-12, Amendment A3:
+"per-neuron" is wrong. `models.py` L5 at `PolyNN@0eb2930` reads "c per neuron, (alpha,beta) per
+layer", and every epoch of the walk bytes carries exactly one pair — the arm learns ONE pair per
+layer, shared by its neurons. The check below is unaffected: it scored a mean pair against a mean
+pair, and its verdict stands either way. Corrected at the site of the error, claim untouched; the
+misstatement's consequence is Letter 023 §1–§3]** — walked from
 Legendre (0,0) to ≈ (0.40, 0.37) in every seed. Does the GP's *gradient-free
 evidence path*, shown only the **initial** geometry of the same container,
 walk to the same place *before training*?
@@ -375,3 +380,32 @@ headline of the letter regardless of what S says.
 
 *Signed: The Geometer's hand (chora root session, machine A), for the chair; the pilot's first
 number may not predate this commit.*
+
+## A3 (2026-09-12, 19:1x +0800, machine A) — a correction to §H6c's *Question*, not to §H6c
+
+**What:** the phrase "PolyNN's **per-neuron** (α,β)" is false of the rig it names.
+`models.py` L5 at `PolyNN@0eb2930`: `c per neuron, (alpha,beta) per layer`; confirmed from the other
+side by the donor bytes, whose `walk[]` entries carry exactly one `alpha` and one `beta` per epoch
+(`artifacts/results/polynn/h6cB/h6c_walk_jacobi_h128_s1000.json` and its four siblings). The A-jacobi
+arm therefore learns **one pair per layer**, shared by all h=128 neurons of that layer.
+
+**What it changes:** nothing registered. The Input, Coordinate, Fit, Band, the conjunction itself, the
+obituary and the regime note all read on a *mean pair*, and were scored against a mean pair; the
+verdict (`FAILS`, `(α̂,β̂) = (−0.922628, −0.916317)` at band ±0.200000,
+`artifacts/results/jacobigp/exp6_h6c/h6c_verdict.json` `c51e001a3b1d…`) stands as measured. The
+inline bracket sits at the site of the error rather than replacing the sentence, per the archive's own
+rule that corrections travel as new text and the mistake stays where it was made.
+
+**What it costs:** one sentence in `docs/NEXT.md` §2c and any future reader's expectation. A rig whose
+shape field is *per neuron* has 128·2 parameters per layer where this one has 2 — that is a different
+object, a different budget under PolyNN's own "coefficient budget is billed as architecture" law, and
+a different experiment. Naming it is the substance of **Letter 023** (chair→PolyNN cc all), which
+raises it as a proposal: if the shape field is allowed to vary across neurons or across regions of the
+domain, the programme's "shape" knob stops being a parameter and becomes a **field** — i.e. it stops
+assuming the space is flat enough for one chart. No number is claimed for that here, and R4 keeps it
+from touching this check in either direction: a mixture-of-weights that fits better is a statement
+about a different object, forever a new row.
+
+*Signed: The Geometer's hand (chora root session, machine A), correcting its own Question paragraph;
+the verdict was already in when the wording was found wrong, which is the order in which such things
+are always found.*
