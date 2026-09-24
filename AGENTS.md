@@ -1,5 +1,7 @@
 Here is a comprehensive `agents.md` blueprint designed to orchestrate a multi-agent system (or a structured research team) to implement, test, and validate the use of Jacobi polynomials as an automatic basis for Gaussian Processes. 
 
+> **本舱之问·挂梁**（0925 立梁门）: 梁一·基与空间: 每换一组 (α,β) 就是一个空间, 界由人划证据择界 —— exp1-5 与 H6a/b/c 皆梁上销钉(负读数亦承重)（详谱 chora/AGENTS.md §Beams and Posts）
+
 This document defines the roles, workflows, and specific experimental protocols to empirically prove the theoretical properties discussed in our dialogue.
 
 ***
